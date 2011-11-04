@@ -48,6 +48,10 @@ footer: true
 
 Worked on [HouseBot](http://sourceforge.net/projects/housebot/) which is an AI for the game of Go. Originally written in C++, but then rewritten in [D](http://www.digitalmars.com/d/). Also started an implementation of the game [Havannah](http://en.wikipedia.org/wiki/Havannah) on top of the HouseBot engine, but never finished it.
 
+### Small ruby projects
+
+See [https://github.com/msales](https://github.com/msales) for a list of small projects or patches to existing Ruby projects that I authored during my time at [mSALES](http://www.msales.com).
+
 ## Education
 
 ### 2001 - 2007 Bioinformatics at [TUM](http://www.tum.de) and [LMU](http://www.lmu.de) in Munich, Germany
