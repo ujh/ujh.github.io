@@ -42,6 +42,12 @@ footer: true
 * I speak English, German (first language), Greek, French, and Swedish
 * I use Macs to develop, but of course deployments happen on Linux so I have good knowledge of that, too. Windows not so much.
 
+## Open Source
+
+### HouseBot
+
+Worked on [HouseBot](http://sourceforge.net/projects/housebot/) which is an AI for the game of Go. Originally written in C++, but then rewritten in [D](http://www.digitalmars.com/d/). Also started an implementation of the game [Havannah](http://en.wikipedia.org/wiki/Havannah) on top of the HouseBot engine, but never finished it.
+
 ## Education
 
 ### 2001 - 2007 Bioinformatics at [TUM](http://www.tum.de) and [LMU](http://www.lmu.de) in Munich, Germany
