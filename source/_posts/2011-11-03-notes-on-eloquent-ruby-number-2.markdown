@@ -3,7 +3,7 @@ layout: post
 title: "Notes on Eloquent Ruby #2"
 date: 2011-11-03 16:31
 comments: true
-categories: book club, ruby
+categories: [book club, ruby]
 ---
 In this second post we look at chapter 10: *Construct Your Classes from Short, Focused Methods*. The first thing that comes to mind is of course that methods should be short. Some years ago my rule of thumb was that a method should fit on the screen. But now that I'm using a 27'' screen that doesn't hold true anymore, of course. Also this misses the important point of the chapter and that is: use the *composed method* technique for your methods. Paraphrasing the book the method written using the composed method technique should have three characteristics:
 
