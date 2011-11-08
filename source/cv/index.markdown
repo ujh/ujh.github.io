@@ -36,9 +36,9 @@ footer: true
 * Ruby (since 2001 when the first version of Programming Ruby came out)
 * JavaScript (mostly jQuery these days)
 * Haml, Sass, HTML, SQL
-* Git
+* Git, Redis
 * Pivotal Tracker, Airbrake, Web Translate It
-* I also used or dabbled with a plethora of other languages but I'm definitely no expert in them: C, C++, D, Erlang, Clojure, Haskell, Fortran, Python, Common Lisp
+* I also used or dabbled with a plethora of other languages but I'm definitely no expert in them: C, C++, D, Erlang, Clojure, Haskell, Fortran, Python, Perl, Common Lisp
 * I speak English, German (first language), Greek, French, and Swedish
 * I use Macs to develop, but of course deployments happen on Linux so I have good knowledge of that, too. Windows not so much.
 
