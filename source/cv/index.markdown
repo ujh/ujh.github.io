@@ -11,10 +11,14 @@ footer: true
 
 *Full Name*: Urban Johannes Hafner  
 *Date of birth*: 5th Aug 1981  
-*Address*: Somewhere in the south of France  
+*Location*: Grenoble, France  
 *Contact*: [urban@bettong.net](mailto:urban@bettong.net)  
 
 ## Employment History
+
+### 2012 Freelance work
+
+* Maintenance and development of new features of [Web Analyzer](https://www.web-analyzer.com/) (a Rails 3 app) in collaboration with [NinjaConcept](http://www.ninjaconcept.com/). Developed in a test first fashion using RSpec and Cucumber.
 
 ### 2009 - 2011 Web developer at [mSALES](http://msales.com)
 
@@ -35,6 +39,7 @@ footer: true
 
 * Ruby (since 2001 when the first version of Programming Ruby came out)
 * JavaScript (mostly jQuery these days)
+* Testing using RSpec and Cucumber
 * Haml, Sass, HTML, SQL
 * Git, Redis
 * Pivotal Tracker, Airbrake, Web Translate It
