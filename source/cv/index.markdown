@@ -1,7 +1,6 @@
 ---
 layout: page
 title: "Resume"
-date: 2011-10-31 10:35
 comments: false
 sharing: false
 footer: true
@@ -47,6 +46,10 @@ footer: true
 * I speak English, German (first language), Greek, French, and Swedish
 * I use Macs to develop, but of course deployments happen on Linux so I have good knowledge of that, too. Windows not so much.
 
+## Community
+
+I started the Ruby User Group in Munich, Germany in 2007 and I'm currently in the process of starting the [Grenoble Ruby User Group](http://grenoblerb.fr).
+
 ## Open Source
 
 ### HouseBot
@@ -69,4 +72,4 @@ Formal education according to the German school system. In the last year I start
 
 ## Other
 
-When I don't spend my time with my family (or anyone of us three is sick) I go out to take pictures with my analog cameras (and develop the film at home). This is a nice change to spending the whole day in front of a screen. And when I can get myself motivated I try to organize user groups (I started the RUG in Munich, Germany in 2007) or at least plan to do it (here in France).
+When I don't spend my time with my family (or anyone of us three is sick) I go out to take pictures with my analog cameras (and develop the film at home). This is a nice change to spending the whole day in front of a screen.
