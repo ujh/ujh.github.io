@@ -72,4 +72,4 @@ Formal education according to the German school system. In the last year I start
 
 ## Other
 
-When I don't spend my time with my family (or anyone of us three is sick) I go out to take pictures with my analog cameras (and develop the film at home). This is a nice change to spending the whole day in front of a screen.
+When I don't spend my time with my family (or anyone of us three is sick) I go out to take pictures with my [analog cameras](http://urbanhafnerphoto.com) (and develop the film at home). This is a nice change to spending the whole day in front of a screen.
