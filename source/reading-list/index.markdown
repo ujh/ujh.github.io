@@ -27,11 +27,11 @@ Books to read
 Books I want to re-read
 -----------------------
 
-* JavaScript Performance Rocks
-* Practices of an Agile Developer
-* The Pragmatic Programmer
-* Design Patterns in Ruby
-* Smalltalk Best Practice Patterns
+* {% img /images/reading-list/rocket.png %} [JavaScript Performance Rocks!](http://javascriptrocks.com/performance/)
+* {% img /images/reading-list/pad.jpg %} [Practices of an Agile Developer](http://pragprog.com/book/pad/practices-of-an-agile-developer)
+* {% img /images/reading-list/tpp.jpg %} [The Pragmatic Programmer](http://pragprog.com/the-pragmatic-programmer)
+* {% img /images/reading-list/designpatternsinruby.jpg %}[Design Patterns in Ruby](http://designpatternsinruby.com/)
+* {% img /images/reading-list/smalltalkbestpracticepatterns.jpg %}[Smalltalk Best Practice Patterns](http://c2.com/cgi/wiki?SmalltalkBestPracticePatterns)
 
 Books I've read
 ---------------
