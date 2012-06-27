@@ -24,6 +24,11 @@ Books to read
 * {% img /images/reading-list/ahptl.jpeg %} [Pragmatic Thinking and Learning](http://pragprog.com/book/ahptl/pragmatic-thinking-and-learning)
 * {% img /images/reading-list/rwdata.jpg %} [Seven Databases in Seven Weeks](http://pragprog.com/book/rwdata/seven-databases-in-seven-weeks)
 * {% img /images/reading-list/getclientsnow.jpg %} [Get Clients Now](http://www.getclientsnow.com/)
+* {% img /images/reading-list/bhtmux.jpg %} [tmux: Productive Mouse-Free Development](http://pragprog.com/book/bhtmux/tmux)
+* {% img /images/reading-list/goos.jpg %} [Growing Object-Oriented Software Guided by Tests](http://www.growing-object-oriented-software.com/)
+* {% img /images/reading-list/refRuby.jpg %} [Refactoring Ruby Edition](http://martinfowler.com/books.html#refactoringRubyEd)
+* {% img /images/reading-list/bootstrappingdesign.jpg %} [Bootstrapping Design](http://bootstrappingdesign.com/)
+* {% img /images/reading-list/modularfrontend.png %} [Modular Front-End](http://modular-frontend.com/)
 
 Books I want to re-read
 -----------------------
@@ -42,4 +47,3 @@ Books I've read
 * {% img /images/reading-list/workingwithunixprocesses.png %} [Working with Unix Processes](http://workingwithunixprocesses.com/)
 * {% img /images/reading-list/jvrails.jpg %} [Crafting Rails Applications](http://pragprog.com/book/jvrails/crafting-rails-applications)
 * {% img /images/reading-list/landoflisp.jpg %} [Land of Lisp](http://landoflisp.com/)
-
