@@ -30,7 +30,7 @@ Books to read
 * {% img /images/reading-list/bootstrappingdesign.jpg %} [Bootstrapping Design](http://bootstrappingdesign.com/)
 * {% img /images/reading-list/modularfrontend.png %} [Modular Front-End](http://modular-frontend.com/)
 
-Books I want to re-read
+Books I've read
 -----------------------
 
 * {% img /images/reading-list/rocket.png %} [JavaScript Performance Rocks!](http://javascriptrocks.com/performance/)
@@ -38,10 +38,6 @@ Books I want to re-read
 * {% img /images/reading-list/tpp.jpg %} [The Pragmatic Programmer](http://pragprog.com/the-pragmatic-programmer)
 * {% img /images/reading-list/designpatternsinruby.jpg %}[Design Patterns in Ruby](http://designpatternsinruby.com/)
 * {% img /images/reading-list/smalltalkbestpracticepatterns.jpg %}[Smalltalk Best Practice Patterns](http://c2.com/cgi/wiki?SmalltalkBestPracticePatterns)
-
-Books I've read
----------------
-
 * {% img /images/reading-list/exceptionalruby.png %} [Exceptional Ruby](http://exceptionalruby.com/)
 * {% img /images/reading-list/objectsonrails.jpg %} [Objects on Rails](http://objectsonrails.com/)
 * {% img /images/reading-list/workingwithunixprocesses.png %} [Working with Unix Processes](http://workingwithunixprocesses.com/)
