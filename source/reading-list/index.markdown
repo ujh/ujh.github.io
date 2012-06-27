@@ -5,6 +5,7 @@ comments: true
 sharing: true
 footer: true
 body_id: reading-list
+date: 2012-06-27
 ---
 
 This is a list of tech books that I'm planning to read, have read, or want to re-read. For those that I've read I'll link to my review on the blog. Please fell free to comment and suggest new ones.
@@ -36,8 +37,9 @@ Books I want to re-read
 Books I've read
 ---------------
 
-* Exceptional Ruby
-* Objects on Rails
-* Working with Unix Processes
-* Crafting Rails Applications
-* Land of Lisp
+* {% img /images/reading-list/exceptionalruby.png %} [Exceptional Ruby](http://exceptionalruby.com/)
+* {% img /images/reading-list/objectsonrails.jpg %} [Objects on Rails](http://objectsonrails.com/)
+* {% img /images/reading-list/workingwithunixprocesses.png %} [Working with Unix Processes](http://workingwithunixprocesses.com/)
+* {% img /images/reading-list/jvrails.jpg %} [Crafting Rails Applications](http://pragprog.com/book/jvrails/crafting-rails-applications)
+* {% img /images/reading-list/landoflisp.jpg %} [Land of Lisp](http://landoflisp.com/)
+
