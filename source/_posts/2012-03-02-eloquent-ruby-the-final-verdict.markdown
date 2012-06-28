@@ -3,7 +3,7 @@ layout: post
 title: "Eloquent Ruby -- The final verdict"
 date: 2012-03-02 21:25
 comments: true
-categories: [book club, ruby, review, book review]
+categories: [book club, ruby, review, book review, eloquent ruby]
 ---
 This will be my final post on Eloquent Ruby by Russ Olsen. All in all I really liked the book and I think that if you're serious about being a Ruby developer this book should be in your library.
 

@@ -3,7 +3,7 @@ layout: post
 title: "Notes on Eloquent Ruby #1"
 date: 2011-10-27 13:47
 comments: true
-categories: [ruby, book club]
+categories: [ruby, book club, eloquent ruby]
 ---
 The [Ruby Rogues](http://rubyrogues.com/) book club is currently reading
 Eloquent Ruby and I thought I'd tag along and read the book, too. I'll be

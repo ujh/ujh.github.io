@@ -5,10 +5,10 @@ comments: true
 sharing: true
 footer: true
 body_id: reading-list
-date: 2012-06-27
+date: 2012-06-28
 ---
 
-This is a list of tech books that I'm planning to read, have read, or want to re-read. For those that I've read I'll link to my review on the blog. Please fell free to comment and suggest new ones.
+This is a list of tech books that I'm planning to read, or have read. I'll add more information on each book in time and I will hopefully write full fledged reviews for more books and link them from here. Feel free to comment on any book and recommend new ones!
 
 Books to read
 -------------
@@ -42,4 +42,5 @@ Books I've read
 * {% rle "Objects on Rails" http://objectsonrails.com/ %}
 * {% rle "Working with Unix Processes" http://workingwithunixprocesses.com/ %}
 * {% rle "Crafting Rails Applications" http://pragprog.com/book/jvrails/crafting-rails-applications %}
-* {% rle "Land of Lisp" http://landoflisp.com/ %}
+* {% rle "Land of Lisp" http://landoflisp.com/ %} See my review [here](/2012/03/08/book-review-land-of-lisp-by-conrad-barski/).
+* {% rle "Eloquent Ruby" http://eloquentruby.com/ %} See my series of posts on this book [here](http://blog.dev/blog/categories/eloquent-ruby/).

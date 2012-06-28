@@ -3,7 +3,7 @@ layout: post
 title: "Notes on Eloquent Ruby #3"
 date: 2011-11-07 15:11
 comments: true
-categories: [book club, ruby]
+categories: [book club, ruby, eloquent ruby]
 ---
 In this post I'm focusing on chapter 13: *Get the Behavior You Need with Singleton and Class Methods*. This chapter was a nice wow moment for me, but also a bit embarrassing as this isn't really advanced Ruby knowledge but I've managed to never really learn it. So what does the chapter talk about? It talks about Ruby singleton and class methods and that they're basically the same thing under the hood!
 
