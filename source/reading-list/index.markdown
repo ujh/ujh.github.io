@@ -13,33 +13,33 @@ This is a list of tech books that I'm planning to read, have read, or want to re
 Books to read
 -------------
 
-* {% img /images/reading-list/lyah.png %} [Learn You a Haskell for Great Good](http://learnyouahaskell.com/)
-* {% img /images/reading-list/31dbbb_starburst_300px.jpg %}[31 Days to Build a Better Blog](http://www.problogger.net/31dbbb-workbook/)
-* {% img /images/reading-list/tbcoffee.jpg %} [CoffeeScript: Accelerated JavaScript Development](http://pragprog.com/book/tbcoffee/coffeescript)
-* {% img /images/reading-list/ejs.png %} [Eloquent JavaScript](http://eloquentjavascript.net/)
-* {% img /images/reading-list/SmoothCoverWeb.png %}[Smooth CoffeeScript](http://autotelicum.github.com/Smooth-CoffeeScript/)
-* {% img /images/reading-list/ppmetr.jpeg %} [Metaprogramming Ruby](http://pragprog.com/book/ppmetr/metaprogramming-ruby)
-* {% img /images/reading-list/jtrap.jpeg %} [The Agile Samurai](http://pragprog.com/book/jtrap/the-agile-samurai)
-* {% img  /images/reading-list/refactoringBook.jpg %} [Refactoring](http://martinfowler.com/books.html#refactoring)
-* {% img /images/reading-list/ahptl.jpeg %} [Pragmatic Thinking and Learning](http://pragprog.com/book/ahptl/pragmatic-thinking-and-learning)
-* {% img /images/reading-list/rwdata.jpg %} [Seven Databases in Seven Weeks](http://pragprog.com/book/rwdata/seven-databases-in-seven-weeks)
-* {% img /images/reading-list/getclientsnow.jpg %} [Get Clients Now](http://www.getclientsnow.com/)
-* {% img /images/reading-list/bhtmux.jpg %} [tmux: Productive Mouse-Free Development](http://pragprog.com/book/bhtmux/tmux)
-* {% img /images/reading-list/goos.jpg %} [Growing Object-Oriented Software Guided by Tests](http://www.growing-object-oriented-software.com/)
-* {% img /images/reading-list/refRuby.jpg %} [Refactoring Ruby Edition](http://martinfowler.com/books.html#refactoringRubyEd)
-* {% img /images/reading-list/bootstrappingdesign.jpg %} [Bootstrapping Design](http://bootstrappingdesign.com/)
-* {% img /images/reading-list/modularfrontend.png %} [Modular Front-End](http://modular-frontend.com/)
+* {% rle "Learn You a Haskell for Great Good" http://learnyouahaskell.com/ %}
+* {% rle "31 Days to Build a Better Blog" http://www.problogger.net/31dbbb-workbook/ %}
+* {% rle "CoffeeScript: Accelerated JavaScript Development" http://pragprog.com/book/tbcoffee/coffeescript %}
+* {% rle "Eloquent Javascript" http://eloquentjavascript.net/ %}
+* {% rle "Smooth CoffeeScript" http://autotelicum.github.com/Smooth-CoffeeScript/ %}
+* {% rle "Metaprogramming Ruby" http://pragprog.com/book/ppmetr/metaprogramming-ruby %}
+* {% rle "The Agile Samurai" http://pragprog.com/book/jtrap/the-agile-samurai %}
+* {% rle "Refactoring" http://martinfowler.com/books.html#refactoring %}
+* {% rle "Pragmatic Thinking and Learning" http://pragprog.com/book/ahptl/pragmatic-thinking-and-learning %}
+* {% rle "Seven Databases in Seven Weeks" http://pragprog.com/book/rwdata/seven-databases-in-seven-weeks %}
+* {% rle "Get Clients Now" http://www.getclientsnow.com/ %}
+* {% rle "tmux: Productive Mouse-Free Development" http://pragprog.com/book/bhtmux/tmux %}
+* {% rle "Growing Object-Oriented Software Guided by Tests" http://www.growing-object-oriented-software.com/ %}
+* {% rle "Refactoring Ruby Edition" http://martinfowler.com/books.html#refactoringRubyEd %}
+* {% rle "Bootstrapping Design" http://bootstrappingdesign.com/ %}
+* {% rle "Modular Front-End" http://modular-frontend.com/ %}
 
 Books I've read
 -----------------------
 
-* {% img /images/reading-list/rocket.png %} [JavaScript Performance Rocks!](http://javascriptrocks.com/performance/)
-* {% img /images/reading-list/pad.jpg %} [Practices of an Agile Developer](http://pragprog.com/book/pad/practices-of-an-agile-developer)
-* {% img /images/reading-list/tpp.jpg %} [The Pragmatic Programmer](http://pragprog.com/the-pragmatic-programmer)
-* {% img /images/reading-list/designpatternsinruby.jpg %}[Design Patterns in Ruby](http://designpatternsinruby.com/)
-* {% img /images/reading-list/smalltalkbestpracticepatterns.jpg %}[Smalltalk Best Practice Patterns](http://c2.com/cgi/wiki?SmalltalkBestPracticePatterns)
-* {% img /images/reading-list/exceptionalruby.png %} [Exceptional Ruby](http://exceptionalruby.com/)
-* {% img /images/reading-list/objectsonrails.jpg %} [Objects on Rails](http://objectsonrails.com/)
-* {% img /images/reading-list/workingwithunixprocesses.png %} [Working with Unix Processes](http://workingwithunixprocesses.com/)
-* {% img /images/reading-list/jvrails.jpg %} [Crafting Rails Applications](http://pragprog.com/book/jvrails/crafting-rails-applications)
-* {% img /images/reading-list/landoflisp.jpg %} [Land of Lisp](http://landoflisp.com/)
+* {% rle "JavaScript Performance Rocks!" http://javascriptrocks.com/performance/ %}
+* {% rle "Practices of an Agile Developer" http://pragprog.com/book/pad/practices-of-an-agile-developer %}
+* {% rle "The Pragmatic Programmer" http://pragprog.com/the-pragmatic-programmer %}
+* {% rle "Design Patterns in Ruby" http://designpatternsinruby.com/ %}
+* {% rle "Smalltalk Best Practice Patterns" http://c2.com/cgi/wiki?SmalltalkBestPracticePatterns %}
+* {% rle "Exceptional Ruby" http://exceptionalruby.com/ %}
+* {% rle "Objects on Rails" http://objectsonrails.com/ %}
+* {% rle "Working with Unix Processes" http://workingwithunixprocesses.com/ %}
+* {% rle "Crafting Rails Applications" http://pragprog.com/book/jvrails/crafting-rails-applications %}
+* {% rle "Land of Lisp" http://landoflisp.com/ %}
