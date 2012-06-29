@@ -29,6 +29,7 @@ Books to read
 * {% rle "Refactoring Ruby Edition" http://martinfowler.com/books.html#refactoringRubyEd %}
 * {% rle "Bootstrapping Design" http://bootstrappingdesign.com/ %}
 * {% rle "Modular Front-End" http://modular-frontend.com/ %}
+* {%rle "The Productive Programmer" http://shop.oreilly.com/product/9780596519544.do %} Suggested by [Trevor Bramble](http://trevorbramble.com/)
 
 Books I've read
 -----------------------
