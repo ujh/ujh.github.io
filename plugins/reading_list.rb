@@ -13,7 +13,7 @@ module Jekyll
       url   = $2
       descr = $3
       img   = title.gsub(/\W/, '').downcase
-      "<a href='#{url}'><img src='/images/reading-list/#{img}.png'></img></a><strong>#{title}.</strong> #{descr}"
+      "<a name='#{img}'></a><a href='#{url}'><img src='/images/reading-list/#{img}.png'></img></a><strong>#{title}.</strong> #{descr}"
     end
   end
 end
