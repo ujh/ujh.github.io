@@ -7,7 +7,7 @@ footer: true
 ---
 
 Urban Hafner<br />
-1 rue d'Agier<br />
+1 place Notre Dame<br />
 38000 Grenoble<br />
 France
 
