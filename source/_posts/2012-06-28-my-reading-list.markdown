@@ -3,7 +3,7 @@ layout: post
 title: "My Reading List"
 date: 2012-06-28 12:50
 comments: true
-categories: 
+categories: ["books"]
 ---
 I always found it interesting to see what other people in our field are reading. In that vain I thought I'd share my [reading list](/reading-list), too.
 
