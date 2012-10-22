@@ -6,7 +6,7 @@ comments: true
 categories: ["pair programming"]
 ---
 
-For most of my professional life as a programmer I've been either working alone as a freelancer or in small teams that didn't practice pair programming. To improve my skills I want to start to pair program regularly with other people. If you're interested please contact me or just schedule a session on my [dedicated calendar](http://tungle.me/ujh).
+For most of my professional life as a programmer I've been either working alone as a freelancer or in small teams that didn't practice pair programming. To improve my skills I want to start to pair program regularly with other people. If you're interested please contact me or just schedule a session on my [dedicated calendar](http://doodle.com/urbanhafner).
 
 I'm open to almost any topic and programming language but I know Ruby and JavaScript (both in a web development context) best so that would be good starting point for me.
 
