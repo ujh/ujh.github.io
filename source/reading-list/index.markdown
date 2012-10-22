@@ -13,6 +13,10 @@ This is a list of tech books that I'm planning to read, or have read. I'll add m
 Books to read
 -------------
 
+* {% rle "Sinatra: Up and Running" http://shop.oreilly.com/product/0636920019664.do %}
+* {% rle "The Lean Startup" http://theleanstartup.com/ %}
+* {% rle "The Art of the Start" http://www.guykawasaki.com/the-art-of-the-start/%}
+* {% rle "Start Small, Stay Small" http://www.startupbook.net/ %}
 * {% rle "Learn You a Haskell for Great Good" http://learnyouahaskell.com/ %} This book is advertised in the back of [Land of Lisp](#landoflisp) which I read in the [Ruby Rogues](http://rubyrogues.com/) book club. I picked it up because it seems to have a similar crazy style as [Land of Lisp](#landoflisp) which I enjoyed very much. Also some of the panelists on the [Ruby Rogues episode that discussed Land of Lisp](http://rubyrogues.com/043-rr-book-club-land-of-list-with-conrad-barski/) mentioned that they learnt Haskell, too. And to add to that I had tried to learn Haskell a few years ago and thought that now might be a good time to try again. I do hope that this time I'll be able to read the whole book :)
 * {% rle "31 Days to Build a Better Blog" http://www.problogger.net/31dbbb-workbook/ %} This ebook on how to write a successful blog was mentioned on the [Ruby Freelancers](http://rubyfreelancers.com/) show and as I find it quite difficult to keep my blog going I hope that this will help me. After all as a freelancer I should have some kind of presence on the web ...
 * {% rle "CoffeeScript: Accelerated JavaScript Development" http://pragprog.com/book/tbcoffee/coffeescript %} The CoffeeScript book by the Pragmatic Bookshelf. What more is there to say?
