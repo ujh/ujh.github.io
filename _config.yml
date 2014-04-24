@@ -63,7 +63,7 @@ default_asides: [custom/asides/pair_programming.html, asides/recent_posts.html, 
 # ----------------------- #
 
 # Github repositories
-github_user: ujh
+github_user:
 github_repo_count: 0
 github_show_profile_link: true
 github_skip_forks: true
