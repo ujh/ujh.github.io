@@ -18,6 +18,6 @@ To combat this I'm trying to pair program with people (i.e. *you*) to keep me go
 
 Currently (as of April 2014) the project is still in it's infancy (actually no code was written, yet), but please check out the [repository](https://github.com/ujh/iomrascalai) and [Trello board](https://trello.com/b/NU4MXbao/iomrascalai).
 
-If you're new to Rust I suggest the [30-minute Introduction to Rust](http://static.rust-lang.org/doc/master/intro.html), [The Rust Language Tutorial](http://static.rust-lang.org/doc/master/tutorial.html), and [Rust by Example](http://rustbyexample.com/) as a start. If you're new to the game of Go ... well there's [a whole Wiki about it](http://senseis.xmp.net/)!
+If you're new to Rust I suggest the [30-minute Introduction to Rust](http://static.rust-lang.org/doc/master/intro.html), [The Rust Language Tutorial](http://static.rust-lang.org/doc/master/tutorial.html), and [Rust by Example](http://rustbyexample.com/) as a start. If you're new to the game of Go ... well there's [a whole Wiki about it](http://senseis.xmp.net/)! And for computer go related content the best place is the [computer-go mailing list](http://dvandva.org/pipermail/computer-go/).
 
 *So, please get in touch so that we can get this started!*
