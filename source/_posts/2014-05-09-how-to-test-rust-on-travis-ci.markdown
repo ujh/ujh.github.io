@@ -13,6 +13,7 @@ At first I used the setup provided by [Rust CI](http://www.rust-ci.org/help/), b
 It was actually quite easy to do and if you want to test your Rust project on Travis CI yourself just drop that file into your project folder and adjust the last line to run your tests!
 
 ``` yaml .travis.yml
+language: c
 install:
   - curl -O http://static.rust-lang.org/dist/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
   - tar xfz rust-nightly-x86_64-unknown-linux-gnu.tar.gz
