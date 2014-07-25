@@ -67,7 +67,7 @@ To prove that I haven't told you any lies, let's compile the program
 and run it. You'll clearly see that `c1` contains `Implementer1` and
 `c2` contains `Implementer2`.
 
-``` bash
+``` plain
 $ rustc compile-time-polymorphic-struct.rs
 $ ./compile-time-polymorphic-struct
 c1 = Container { s: Implementer1 }

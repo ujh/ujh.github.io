@@ -66,7 +66,7 @@ fn main() {
 If you run this you'll see that the value of pi calculated by this
 function improves with the number of random drawings:
 
-``` sh
+``` plain
 uh@croissant:~/Personal/rust$ ./tasks-and-messages-1
 For       1000 random drawings pi = 3.132
 For      10000 random drawings pi = 3.1428
@@ -158,7 +158,7 @@ returns true) or and error (in which case `is_ok()` returns false).
 
 Running this produces the following output:
 
-``` sh
+``` plain
 uh@croissant:~/Personal/rust$ ./tasks-and-messages-2
 main(): start calculation and wait 10s
 worker(): Starting calculation
@@ -184,3 +184,5 @@ result to `main()` once it has finished the current run of
 This blog post has already gotten very long so we'll end it here. In
 the next installment, we'll finish implementing the program and maybe
 even start cleaning up the code.
+
+CREATE GIT REPO WITH THE CODE, PUT IT ON GITHUB AND MENTION IT HERE.
