@@ -75,4 +75,4 @@ c2 = Container { s: Implementer2 }
 ```
 
 Next time we'll talk about how to do actual runtime polymorphism in
-Rust. After all it's not always possible to know the type at runtime!
+Rust. After all it's not always possible to know the type at compile time!
