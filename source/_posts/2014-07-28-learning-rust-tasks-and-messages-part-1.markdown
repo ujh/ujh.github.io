@@ -11,6 +11,10 @@ categories:
   - tasks
 ---
 
+*The code examples of this blog post are available in the Git
+ repository
+ [tasks-and-messages](http://github.com/ujh/tasks-and-messages).*
+
 In the
 [previous learning rust blog post](/2014/07/24/learning-rust-compile-time-polymorphism/)
 I promised to talk about runtime polymorphism next. Instead I'm
@@ -23,9 +27,9 @@ need a way to tell the AI to *search for the best move for the next N
 seconds* and then return the result immediately.
 
 Explaining how the AI works is out of the scope of this blog post. The
-only thing you need to know here is that it essentially is an endless
-loop that does some computation and improves the result the longer it
-can run. Unfortunately each iteration of the loop is rather long, so
+only thing you need to know here, is that it essentially is an endless
+loop that does some computation and the longer it can run, the better
+the result will be. Unfortunately each iteration of the loop is rather long, so
 we need to make sure we can return a result **while** we're doing the
 computation of that iteration. This is where concurrency comes in
 handy. What if we could run the iteration in a separate Rust task?
@@ -78,9 +82,9 @@ For   10000000 random drawings pi = 3.141082
 Next, let's rewrite this program so that it runs for 10 seconds and
 prints out the value of pi. To do this we'll run the simulation in
 chunks of 10 million drawings (around 2.2s on my machine) in a separate
-task and let the main task wait for ten seconds. Once the 10 seconds
-are over we'll send a signal to the worker task and ask it to return a
-result.
+task and we'll let the main task wait for ten seconds. Once the 10
+seconds are over we'll send a signal to the worker task and ask it to
+return a result.
 
 This is of course a bit contrived as we could just run the simulations
 in sync and regularly check if 10 seconds have passed. But we're
@@ -145,8 +149,8 @@ fn main() {
 What we do is as follows: We open two channels. One channel is for the
 `worker()` to send the value of pi to the `main()` function
 (`send_from_worker_to_main` and `receive_from_worker`). And
-another channel is to send a signal from `main()` to worker to tell it
-to stop the calculation and return the result
+another channel is to send a signal from `main()` to `worker()` to
+tell it to stop the calculation and return the result
 (`send_from_main_to_worker` and `receive_from_main`). To send
 something along a channel you just call `send(VALUE)` and to receive
 something you call `recv()`. It is important to note that `recv()` is
@@ -179,10 +183,10 @@ main(): pi = 3.141643
 If you look closely at the result you will notice that we haven't yet
 implemented everything as described. The `worker()` only returns a
 result to `main()` once it has finished the current run of
-`montecarlopi()`.
+`montecarlopi()`. But what I originally described was that it should
+be possible to return a result **while** the the computation is still
+running.
 
-This blog post has already gotten very long so we'll end it here. In
-the next installment, we'll finish implementing the program and maybe
-even start cleaning up the code.
-
-CREATE GIT REPO WITH THE CODE, PUT IT ON GITHUB AND MENTION IT HERE.
+As this blog post has already gotten very long so we'll end it here
+nevertheless. In the next installment, we'll finish implementing the
+program and maybe even start cleaning up the code.
