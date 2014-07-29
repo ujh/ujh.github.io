@@ -9,6 +9,7 @@ categories:
   - learning rust
   - concurrency
   - tasks
+  - learning rust tasks and messages
 ---
 
 *The code examples of this blog post are available in the Git
