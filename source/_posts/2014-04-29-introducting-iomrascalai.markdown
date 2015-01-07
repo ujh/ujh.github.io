@@ -3,7 +3,15 @@ layout: post
 title: "Introducting Iomrascálaí"
 date: 2014-04-29 08:51:04 +0200
 comments: true
-categories: [rust, pair programming, go, baduk, weiqi, ai, iomrascálaí]
+categories:
+  - rust
+  - pair programming
+  - go
+  - baduk
+  - weiqi
+  - ai
+  - iomrascálaí
+  - artificial intelligence
 ---
 
 or *"Help me learn Rust by pairing with me"*
