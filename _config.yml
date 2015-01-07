@@ -4,7 +4,7 @@
 
 url: http://bettong.net
 title: Urban Hafner
-subtitle: "Ruby, Ruby on Rails, JavaScript freelancer. Always looking for new projects."
+subtitle: "Ruby, Ruby on Rails, JavaScript programmer. Dabbling with Rust and agile methodologies on the side."
 author: Urban Hafner
 simple_search: http://google.com/search
 description:
@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /articles.atom
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+email: contact@urbanhafner.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
