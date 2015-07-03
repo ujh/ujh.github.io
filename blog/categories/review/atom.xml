@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: review | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/review/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Book Review: Land of Lisp by Conrad Barski]]></title>
+    <link href="http://bettong.net/2012/03/08/book-review-land-of-lisp-by-conrad-barski/"/>
+    <updated>2012-03-08T09:31:00+01:00</updated>
+    <id>http://bettong.net/2012/03/08/book-review-land-of-lisp-by-conrad-barski</id>
+    <content type="html"><![CDATA[<p><img src="http://bettong.net/images/posts/lol_small.jpg" />
+<a href="http://landoflisp.com/">Land of Lisp</a> by Conrad Barski is the second book in the <a href="http://rubyrogues.com/">Ruby Rogues</a> book club. As I enjoyed <a href="http://bettong.net/2012/03/02/eloquent-ruby-the-final-verdict/">Eloquent Ruby</a> (which was the first book we read) very much I thought I&rsquo;d give that one a try, too. And of course I hadn&rsquo;t used Lisp for a long time so I thought it would be a good refresher.</p>
+
+<p>The first thing you see when you pick up the book is the awesome cover. The somewhat poorly drawn <a href="http://lisperati.com/logo.html">Lisp Alien</a> that Conrad Barski created some years ago as the mascot of Lisp sets the tone for the book: This isn&rsquo;t just another dry textbook that explains everything that Lisp (Common Lisp in this case) does. It contains drawings and you learn not by writing yet another calculator but by writing games.</p>
+
+<p>Of course he&rsquo;s starting with the basic elements of Lisp so the first games are quite simple, but as the book progresses (he&rsquo;s even covering macros and lazy programming) they get more complex and in the end we&rsquo;re even presented with a board game with a GUI that you play in a browser against three computer players!</p>
+
+<p>Ideally you should follow along by typing in the code and experimenting a bit to really understand all the concepts. But up to a certain point in the book it&rsquo;s also OK to just read along. That&rsquo;s what I did because I read the book in the evening on the couch or in the bed. Of course I didn&rsquo;t understand everything with this approach, but it worked well enough for me as most code examples are explained in detail.</p>
+
+<p>All in all it was a fun read and it was great so see how you program in a language where code and data are more or less equal. I&rsquo;m not sure how much of that will translate into my Ruby or JavaScript programming but what the heck it was a fun read!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Eloquent Ruby -- The final verdict]]></title>
+    <link href="http://bettong.net/2012/03/02/eloquent-ruby-the-final-verdict/"/>
+    <updated>2012-03-02T21:25:00+01:00</updated>
+    <id>http://bettong.net/2012/03/02/eloquent-ruby-the-final-verdict</id>
+    <content type="html"><![CDATA[<p>This will be my final post on Eloquent Ruby by Russ Olsen. All in all I really liked the book and I think that if you&rsquo;re serious about being a Ruby developer this book should be in your library.</p>
+
+<p>It is a valuable book for several reasons. First of all it is as close as humanly possible to a definite style guide for programming in Ruby. This doesn&rsquo;t just cover formatting your code and if or when to use camel case but more importantly when and how to use certain parts of the language. Secondly, it contains a lot of best practices, especially on the use of modules, classes and meta-programming. And thirdly it explains some of the more advances parts of Ruby extremely well. For example I never knew the difference between <code>lambda</code> and <code>Proc.new</code> and what hooks Ruby provides to help you with meta-programming.</p>
+
+<p>So please do yourself a favor and read the book. More than once!</p>
+]]></content>
+  </entry>
+  
+</feed>

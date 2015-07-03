@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: travis ci | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/travis-ci/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How to test Rust on Travis CI]]></title>
+    <link href="http://bettong.net/2014/05/09/how-to-test-rust-on-travis-ci/"/>
+    <updated>2014-05-09T16:07:51+02:00</updated>
+    <id>http://bettong.net/2014/05/09/how-to-test-rust-on-travis-ci</id>
+    <content type="html"><![CDATA[<p>Working with Ruby on Rails in my projects I&rsquo;m used to running continuous integration on <a href="https://travis-ci.org/">Travis CI</a>. As this is free of charge for open source projects projects I wanted to set it up for my Rust project <a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a>, too.</p>
+
+<p>At first I used the setup provided by <a href="http://www.rust-ci.org/help/">Rust CI</a>, but as the project page doesn&rsquo;t seem to be working 100% anymore and because the Debian package they provide of the rust nightly snapshot for some reason strips the Rust version number I decided to use the official nightly snapshots instead.</p>
+
+<!-- more -->
+
+
+<p>It was actually quite easy to do and if you want to test your Rust project on Travis CI yourself just drop that file into your project folder and adjust the last line to run your tests!</p>
+
+<pre><code class="yaml .travis.yml">language: c
+install:
+  - curl -O http://static.rust-lang.org/dist/rust-nightly-x86_64-unknown-linux-gnu.tar.gz
+  - tar xfz rust-nightly-x86_64-unknown-linux-gnu.tar.gz
+  - (cd rust-nightly-x86_64-unknown-linux-gnu/ &amp;&amp; sudo ./install.sh)
+script:
+  - rustc --version
+  - make
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

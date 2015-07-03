@@ -1,0 +1,1284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Urban Hafner]]></title>
+  <link href="http://bettong.net/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Why Every Agile Team Should Include a Tester]]></title>
+    <link href="http://bettong.net/2015/07/03/why-every-agile-team-should-include-a-tester/"/>
+    <updated>2015-07-03T07:26:31+02:00</updated>
+    <id>http://bettong.net/2015/07/03/why-every-agile-team-should-include-a-tester</id>
+    <content type="html"><![CDATA[<p>A
+<a href="http://softwaresaltmines.com/2015/06/30/endangered-species-managers-and-directors-of-quality-assurance/">recent post on Jim Grey&rsquo;s blog about his job hunt as a QA manager</a>
+made me think about what my ideal test setup for an agile (SCRUM like)
+team would be.</p>
+
+<p>The thing is, having QA as a completely separate team that tests
+everything once the development team has &ldquo;finished&rdquo; the features and
+bug fixes for the next release is very much out of line with every
+agile methodology. Agile processes are (to me at least) about faster
+feedback and the possibility to change direction quickly. So for
+example, if you were doing SCRUM with one week sprints, do a feature
+freeze every month (you know, management won&rsquo;t let you release each
+week), and only <em>then</em> start testing all the features and bug fixes
+there&rsquo;s quite a lot of overhead. The QA process may take a while as
+everything produced in a month needs to be tested, the developers have
+already moved on to new features and now have to switch <em>back</em> to
+fixing their old code (which is quite a mental overhead) and once
+everything has been tested, fixed, and tested again it&rsquo;s already 2-3
+weeks later.</p>
+
+<!-- more -->
+
+
+<p>A better approach I found is to have the testing being done right
+after the feature or bug fix is finished. Assuming you have automated
+tests and an automated deployment process (I&rsquo;m assuming that you&rsquo;re
+developing a web app) you can just have your continuous integration
+server run the tests and once they pass deploy the latest version of
+the code to your staging server and notify the tester. That way the
+tester can do the checking right away and send feedback within hours
+or even minutes. After such a short amount of time the developer in
+charge probably still knows enough about the code so that he can
+quickly fix the issues the tester found.</p>
+
+<p>Obviously a final round of QA before getting a release out the door is
+still necessary, but as it can be assumed that all features and bug
+fixes are correctly implemented this can now be much shorter and needs
+to be less thorough. That way the release can be shipping much faster,
+any you know maybe you can even ship more often than once a month.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using Launchd to Manage Long Running Processes on Mac OS X]]></title>
+    <link href="http://bettong.net/2015/01/18/using-launchd-to-manage-long-running-processes-on-mac-os-x/"/>
+    <updated>2015-01-18T13:23:05+01:00</updated>
+    <id>http://bettong.net/2015/01/18/using-launchd-to-manage-long-running-processes-on-mac-os-x</id>
+    <content type="html"><![CDATA[<p>I recently had the need to have a long running, user defined process
+on my Mac. At first I thought about using
+<a href="http://mmonit.com/monit/">Monit</a> or
+<a href="https://github.com/mperham/inspeqtor">Inspeqtor</a>, but then
+<a href="https://jeremy.wordpress.com/">Jérémy Lecour</a>
+<a href="https://twitter.com/jlecour/status/556388096246562816">pointed out to me</a>
+that I could just use the built in <a href="http://launchd.info/">launchd</a>.</p>
+
+<p>Lauchd can automatically start processes on startup and it can monitor
+them and restart them should they abort. Adding one yourself is rather
+easy. You create a file in <code>~/Library/LaunchAgents</code> in a certain
+format. Here&rsquo;s one of mine:</p>
+
+<!-- more -->
+
+
+
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>gnugo13x13.plist</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class='line'><span class="cp">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span>
+</span><span class='line'><span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;dict&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>Label<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;string&gt;</span>gnugo13x13<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>ProgramArguments<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;array&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;string&gt;</span>/Users/uh/bin/cgosGnuGo13x13<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/array&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>KeepAlive<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;true/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>RunAtLoad<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;true/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>StandardOutPath<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;string&gt;</span>/Users/uh/Library/Logs/CGOS/gnugo13x13.stdout<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>StandardErrorPath<span class="nt">&lt;/key&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;string&gt;</span>/Users/uh/Library/Logs/CGOS/gnugo13x13.stderr<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/dict&gt;</span>
+</span><span class='line'><span class="nt">&lt;/plist&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>Then you notify launchd of your new file by running <code>lauchnctl load
+~/Library/LaunchAgents/gnugo13x13.plist</code> and you should see a new line
+in your <code>system.log</code> (accessible through
+<a href="http://en.wikipedia.org/wiki/Console_%28OS_X%29">Console.app</a>). If
+all goes well then that&rsquo;s all you will see there, but if starting the
+log didn&rsquo;t work you will see that mentioned in the <code>system.log</code>, too.</p>
+
+<p>Now let&rsquo;s go through the interesting parts of that file. As you may
+have already guessed we essentially setup key value pairs here. An XML
+element <code>key</code> defines the key name and the next element defines the
+value.</p>
+
+<p><code>Label</code> is the name of your job. It needs to be unique and it
+is used in the <code>system.log</code> whenever there is something happening
+(stop, start, crash, &hellip;) with your job.</p>
+
+<p><code>ProgramArguments</code> is an array of strings that make up your system
+call. The first one is the path to the executable you want to run, and
+the others are command line arguments. If you don&rsquo;t have any command
+line arguments you can just use <code>Program</code>. So, I probably should have
+used <code>Program</code> in my example file, but that&rsquo;s the actual file from my
+system and it works, so why change it, right? ;)</p>
+
+<p><code>KeepAlive</code> is optional and means that launchd will restart your job
+should it terminate. <code>RunAtLoad</code> is necessary to automatically start
+your job when you turn on your computer.</p>
+
+<p>The last two, <code>StandardOutPath</code> and <code>StandardErrorPath</code> should be self
+explanatory. They are paths to files that will be used to log the
+stdout and stderr of your job. There&rsquo;s just one thing you need to keep
+in mind. The folder where these files reside needs to exist before you
+start the job. It will be created by launchd for you, but it will be
+owned by root and therefore the job won&rsquo;t be able to write in there
+and the job will fail.</p>
+
+<p>Detailed information on everything that you can do with launchd can be
+found at <a href="http://launchd.info/">launchd.info</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Iomrascálaí: A Great Way to Learn Rust or About AI]]></title>
+    <link href="http://bettong.net/2015/01/07/iomrascalai-a-great-way-to-learn-rust-or-about-ai/"/>
+    <updated>2015-01-07T09:08:35+01:00</updated>
+    <id>http://bettong.net/2015/01/07/iomrascalai-a-great-way-to-learn-rust-or-about-ai</id>
+    <content type="html"><![CDATA[<p><img src="http://bettong.net/images/rust.png">
+I wrote about <a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a>, my
+personal project to learn <a href="http://www.rust-lang.org/">Rust</a> by writing
+an artificial intelligence for the
+<a href="http://en.wikipedia.org/wiki/Go_(game)">game of Go</a>,
+<a href="http://bettong.net/2014/04/29/introducting-iomrascalai/">on here before</a>. Since then
+it&rsquo;s gone rather quiet as I haven&rsquo;t had much time to work on it. We
+bought a house and moved in, I got a new job, my wife started a new
+job, it&rsquo;s winter so the kids get sick all the time &hellip;</p>
+
+<!-- more -->
+
+
+<p>Now that things have <em>slightly</em> settled down I&rsquo;m ready to continue
+with this project. And this is why I&rsquo;m writing this blog post. If
+there&rsquo;s anyone out there who either wants to learn Rust or learn about
+artificial intelligence then you&rsquo;re welcome to help out with this
+project. I knew nothing about Rust when I started this project, but
+that didn&rsquo;t stop <a href="https://github.com/TisButMe">Thomas P</a> from joining
+and essentially teaching me Rust. I&rsquo;m very greatful and I&rsquo;d like to
+pay it forward by doing the same. So just have a look at the
+<a href="https://github.com/ujh/iomrascalai/issues">Github issue tracker</a>, and
+ask what do work on either in the
+<a href="https://gitter.im/ujh/iomrascalai">chat</a> or in the
+<a href="https://groups.google.com/forum/#!forum/iomrascalai">Google Group</a>.</p>
+
+<p>And if you&rsquo;re interested in artificial intelligence then this could be
+interesting for you, too. After all, the goal is to write a program
+that is good a playing this game!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Two Talks on Isolating Your Domain Logic From Rails]]></title>
+    <link href="http://bettong.net/2014/08/08/two-talks-on-isolating-your-domain-logic-from-rails/"/>
+    <updated>2014-08-08T09:29:49+02:00</updated>
+    <id>http://bettong.net/2014/08/08/two-talks-on-isolating-your-domain-logic-from-rails</id>
+    <content type="html"><![CDATA[<p>Recently one of my co-workers pointed me to this great talk by the
+late Jim Weirich about separating the domain logic of your Ruby on
+Rails app from &ldquo;the plumbing&rdquo;:</p>
+
+<!-- more -->
+
+
+
+
+<iframe width="640" height="360"
+src="//www.youtube-nocookie.com/embed/tg5RFeSfBM4?rel=0"
+frameborder="0" allowfullscreen></iframe>
+
+
+<p>This the led me to the Hexagonal Rails talk by Matt Wynne:</p>
+
+<iframe width="640" height="360"
+src="//www.youtube-nocookie.com/embed/CGN4RFkhH2M?rel=0"
+frameborder="0" allowfullscreen></iframe>
+
+
+<p>Now, I&rsquo;m off to finally read
+<a href="http://www.growing-object-oriented-software.com/">Growing Object-Oriented Software Guided by Tests</a>
+and try to give decoupling my logic from the Ruby on Rails guts a real try!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Rust: Tasks and Messages Part 2]]></title>
+    <link href="http://bettong.net/2014/08/01/learning-rust-tasks-and-messages-part-2/"/>
+    <updated>2014-08-01T08:06:26+02:00</updated>
+    <id>http://bettong.net/2014/08/01/learning-rust-tasks-and-messages-part-2</id>
+    <content type="html"><![CDATA[<p><em>The code examples of this blog post are available in the Git
+ repository
+ <a href="http://github.com/ujh/tasks-and-messages">tasks-and-messages</a>.</em></p>
+
+<p>In
+<a href="http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1/">part 1 of this series</a>
+we started implementing our Pi calculation using the Monte Carlo
+method. We ended with code that works, but that still doesn&rsquo;t return a
+value after exactly 10 seconds. In this part we&rsquo;ll finish the implementation.</p>
+
+<p>The problem with the previous implementation was that the <code>worker()</code>
+function had to wait for <code>montecarlopi()</code> to return, before it could
+react to the message from <code>main()</code>. The solution to this should now be
+obvious: Let&rsquo;s put the <code>montecarlopi()</code> calculation in a separate
+task. Then <code>worker()</code> can listen to messages from both <code>main()</code> and
+<code>montecarlopi()</code> at the same time.</p>
+
+<!-- more -->
+
+
+<p>Here&rsquo;s the code:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>tasks-and-messages-3.rs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">io</span><span class="o">::</span><span class="n">Timer</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">rand</span><span class="o">::</span><span class="n">random</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="o">:</span> <span class="k">uint</span><span class="p">,</span> <span class="n">sender</span><span class="o">:</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="k">uint</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;montecarlopi(): Starting calculation&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">m</span> <span class="o">=</span> <span class="m">0</span><span class="k">u</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">_</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="m">0</span><span class="k">u</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">y</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">1.0</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;montecarlopi(): Calculation done&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">sender</span><span class="p">.</span><span class="n">send_opt</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">worker</span><span class="p">(</span><span class="n">receive_from_main</span><span class="o">:</span> <span class="n">Receiver</span><span class="o">&lt;</span><span class="k">uint</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">send_to_main</span><span class="o">:</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">m</span> <span class="o">=</span> <span class="m">0</span><span class="k">u</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="m">10_000_000</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">i</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receive_from_montecarlo</span><span class="p">)</span> <span class="o">=</span> <span class="n">channel</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">initial_sender</span> <span class="o">=</span> <span class="n">sender</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">spawn</span><span class="p">(</span><span class="n">proc</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">initial_sender</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="o">::</span><span class="n">new</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">loop</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">receive_from_main</span><span class="p">.</span><span class="n">try_recv</span><span class="p">().</span><span class="n">is_ok</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;worker(): Aborting calculation due to signal from main&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">montecarlopi_result</span> <span class="o">=</span> <span class="n">receive_from_montecarlo</span><span class="p">.</span><span class="n">try_recv</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">montecarlopi_result</span><span class="p">.</span><span class="n">is_ok</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="n">montecarlopi_result</span><span class="p">.</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'>            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">let</span> <span class="n">sender_clone</span> <span class="o">=</span> <span class="n">sender</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span>
+</span><span class='line'>            <span class="n">spawn</span><span class="p">(</span><span class="n">proc</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">sender_clone</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">timer</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">50</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">val</span> <span class="o">=</span> <span class="m">4.0</span> <span class="o">*</span> <span class="n">m</span><span class="p">.</span><span class="n">to_f32</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">i</span><span class="p">).</span><span class="n">to_f32</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">send_to_main</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="o">::</span><span class="n">new</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">let</span> <span class="p">(</span><span class="n">send_from_worker_to_main</span><span class="p">,</span> <span class="n">receive_from_worker</span><span class="p">)</span> <span class="o">=</span> <span class="n">channel</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">let</span> <span class="p">(</span><span class="n">send_from_main_to_worker</span><span class="p">,</span> <span class="n">receive_from_main</span><span class="p">)</span>   <span class="o">=</span> <span class="n">channel</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;main(): start calculation and wait 10s&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">spawn</span><span class="p">(</span><span class="n">proc</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">worker</span><span class="p">(</span><span class="n">receive_from_main</span><span class="p">,</span> <span class="n">send_from_worker_to_main</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="n">timer</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">10_000</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;main(): Sending abort to worker&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">send_from_main_to_worker</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;main(): pi = {}&quot;</span><span class="p">,</span> <span class="n">receive_from_worker</span><span class="p">.</span><span class="n">recv</span><span class="p">());</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>And here&rsquo;s the output from running the program. As you can see from
+lines 12-15 it&rsquo;s now working as intended. First <code>main()</code> sends the
+signal, then <code>worker()</code> reacts immediately by sending the latest result to
+<code>main()</code>, and <code>montecarlopi()</code> is left to finish its calculation (but
+the result is discarded).</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ./tasks-and-messages-3
+</span><span class='line'>main(): start calculation and wait 10s
+</span><span class='line'>montecarlopi(): Starting calculation
+</span><span class='line'>montecarlopi(): Calculation done
+</span><span class='line'>montecarlopi(): Starting calculation
+</span><span class='line'>montecarlopi(): Calculation done
+</span><span class='line'>montecarlopi(): Starting calculation
+</span><span class='line'>montecarlopi(): Calculation done
+</span><span class='line'>montecarlopi(): Starting calculation
+</span><span class='line'>montecarlopi(): Calculation done
+</span><span class='line'>montecarlopi(): Starting calculation
+</span><span class='line'>main(): Sending abort to worker
+</span><span class='line'>worker(): Aborting calculation due to signal from main
+</span><span class='line'>main(): pi = 3.141339
+</span><span class='line'>montecarlopi(): Calculation done</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>Now let&rsquo;s go through the code and see what we had to change to make it
+work. First let&rsquo;s look at <code>montecarlopi()</code>:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="k">fn</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="o">:</span> <span class="k">uint</span><span class="p">,</span> <span class="n">sender</span><span class="o">:</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="k">uint</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;montecarlopi(): Starting calculation&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">m</span> <span class="o">=</span> <span class="m">0</span><span class="k">u</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">_</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="m">0</span><span class="k">u</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">y</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">1.0</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;montecarlopi(): Calculation done&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">sender</span><span class="p">.</span><span class="n">send_opt</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>Now that it&rsquo;s in its own task it has to communicate with the
+<code>worker()</code> function and send it the result of the calculation. This is
+as easy as passing in a <code>Sender</code> when calling it. The only interesting
+bit here is that we use <code>send_opt()</code> to send the result to the
+<code>worker()</code> instead of <code>send()</code>. This is because <code>send()</code> aborts the
+program when it can&rsquo;t send the message (i.e. the receiver is gone). We
+need to handle this case as <code>worker()</code> may now return before
+<code>montecarlopi()</code> is done.</p>
+
+<p>So far so good. Now we need to have a look at <code>worker()</code>. It needs to
+change to wire it up correctly with the new <code>montecarlopi()</code>.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receive_from_montecarlo</span><span class="p">)</span> <span class="o">=</span> <span class="n">channel</span><span class="p">();</span>
+</span><span class='line'><span class="k">let</span> <span class="n">initial_sender</span> <span class="o">=</span> <span class="n">sender</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span>
+</span><span class='line'><span class="n">spawn</span><span class="p">(</span><span class="n">proc</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">initial_sender</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="k">let</span> <span class="k">mut</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="o">::</span><span class="n">new</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'><span class="k">loop</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">receive_from_main</span><span class="p">.</span><span class="n">try_recv</span><span class="p">().</span><span class="n">is_ok</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;worker(): Aborting calculation due to signal from main&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">montecarlopi_result</span> <span class="o">=</span> <span class="n">receive_from_montecarlo</span><span class="p">.</span><span class="n">try_recv</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">montecarlopi_result</span><span class="p">.</span><span class="n">is_ok</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="n">montecarlopi_result</span><span class="p">.</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'>        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">sender_clone</span> <span class="o">=</span> <span class="n">sender</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span>
+</span><span class='line'>        <span class="n">spawn</span><span class="p">(</span><span class="n">proc</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">sender_clone</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">timer</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">50</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>First we need a new channel to communicate between <code>worker()</code> and
+<code>montecarlopi()</code>. Then we start the first calculation in a new task.
+And after that we enter the endless loop. In it we check for both
+signals from <code>main()</code> (lines 8-11) and from <code>montecarlopi()</code> (lines
+12-20). If there&rsquo;s a message from <code>main()</code> it means we&rsquo;re done and we
+exit the loop. If there&rsquo;s a message from <code>montecarlopi()</code> it means
+that the calculation is done. We then update our best guess of Pi and
+start another calculation.</p>
+
+<p>The concept used here in <code>worker()</code> isn&rsquo;t that complex. What was the
+most difficult for me to get right was the setup of the channel. You
+can see here that we need to pass a copy of sender. This is due to the
+fact that not only does <code>montecarlopi()</code>
+<a href="http://rustbyexample.com/move.html">take ownership</a> of the sender,
+<a href="http://doc.rust-lang.org/tutorial.html#owned-closures">but also <code>proc()</code></a>.
+This is designed so that Rust can safely move the <code>proc()</code> and all the
+data associated with it to a different task. And we of course have to
+have the channel defined outside of the loop so  that all tasks send
+their data back to the same task.</p>
+
+<p>And this is it for this post! In the next part we&rsquo;ll have a look at
+how we can simplify this design. I don&rsquo;t know about you, but it took
+me quite a while to get this design right. I can&rsquo;t imagine using it
+like this in production code.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Rust: Tasks and Messages Part 1]]></title>
+    <link href="http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1/"/>
+    <updated>2014-07-28T08:11:58+02:00</updated>
+    <id>http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1</id>
+    <content type="html"><![CDATA[<p><em>The code examples of this blog post are available in the Git
+ repository
+ <a href="http://github.com/ujh/tasks-and-messages">tasks-and-messages</a>.</em></p>
+
+<p>In the
+<a href="http://bettong.net/2014/07/24/learning-rust-compile-time-polymorphism/">previous learning rust blog post</a>
+I promised to talk about runtime polymorphism next. Instead I&rsquo;m
+starting what is probably going to become a multi part series about
+concurrency. I&rsquo;m doing this as I just happen to need this stuff for
+<a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a>, my main Rust
+project. Iomrascálaí is an AI for the game of Go. Go is a two player game, and
+like Chess, it is played with a time limit during tournaments. So I
+need a way to tell the AI to <em>search for the best move for the next N
+seconds</em> and then return the result immediately.</p>
+
+<!-- more -->
+
+
+<p>Explaining how the AI works is out of the scope of this blog post. The
+only thing you need to know here, is that it essentially is an endless
+loop that does some computation and the longer it can run, the better
+the result will be. Unfortunately each iteration of the loop is rather long, so
+we need to make sure we can return a result <strong>while</strong> we&rsquo;re doing the
+computation of that iteration. This is where concurrency comes in
+handy. What if we could run the iteration in a separate Rust task?
+Then we could just return the result of the previous iteration if
+needed.</p>
+
+<p>But enough theory, let&rsquo;s get going. As we can&rsquo;t just implement a whole
+Go AI for this blog post we need to find a simpler problem that has
+the property that it returns a better value the longer it runs. The
+simplest I could think of is
+<a href="http://mathfaculty.fullerton.edu/mathews/n2003/montecarlopimod.html">calculating the value of Pi using the Monte Carlo method</a>.
+Here&rsquo;s a simple implementation of it:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>tasks-and-messages-1.rs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">rand</span><span class="o">::</span><span class="n">random</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="o">:</span> <span class="k">uint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">f32</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">m</span> <span class="o">=</span> <span class="m">0</span><span class="k">u</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">_</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="m">0</span><span class="k">u</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">y</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">1.0</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="m">4.0</span> <span class="o">*</span> <span class="n">m</span><span class="p">.</span><span class="n">to_f32</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span><span class="o">/</span><span class="n">n</span><span class="p">.</span><span class="n">to_f32</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;For       1000 random drawings pi = {}&quot;</span><span class="p">,</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="m">1000</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;For      10000 random drawings pi = {}&quot;</span><span class="p">,</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="m">10000</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;For     100000 random drawings pi = {}&quot;</span><span class="p">,</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="m">100000</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;For    1000000 random drawings pi = {}&quot;</span><span class="p">,</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="m">1000000</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;For   10000000 random drawings pi = {}&quot;</span><span class="p">,</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="m">10000000</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>If you run this you&rsquo;ll see that the value of pi calculated by this
+function improves with the number of random drawings:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>uh@croissant:~/Personal/rust$ ./tasks-and-messages-1
+</span><span class='line'>For       1000 random drawings pi = 3.132
+</span><span class='line'>For      10000 random drawings pi = 3.1428
+</span><span class='line'>For     100000 random drawings pi = 3.14416
+</span><span class='line'>For    1000000 random drawings pi = 3.141072
+</span><span class='line'>For   10000000 random drawings pi = 3.141082</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>Next, let&rsquo;s rewrite this program so that it runs for 10 seconds and
+prints out the value of pi. To do this we&rsquo;ll run the simulation in
+chunks of 10 million drawings (around 2.2s on my machine) in a separate
+task and we&rsquo;ll let the main task wait for ten seconds. Once the 10
+seconds are over we&rsquo;ll send a signal to the worker task and ask it to
+return a result.</p>
+
+<p>This is of course a bit contrived as we could just run the simulations
+in sync and regularly check if 10 seconds have passed. But we&rsquo;re
+trying to learn about task here, remember?</p>
+
+<p>Creating a new task in Rust is as easy as calling <code>spawn(proc() { ... })</code> with some
+code. This however only creates a new task, but there&rsquo;s no way to
+communicate with this task. That&rsquo;s where channels come it. A channel
+is a pair of objects. One end can send data (the sender) and the other
+end (the receiver) can receive the data sent by the sender. Now let&rsquo;s
+put it into action:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>tasks-and-messages-2.rs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">io</span><span class="o">::</span><span class="n">Timer</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">rand</span><span class="o">::</span><span class="n">random</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="o">:</span> <span class="k">uint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">uint</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">m</span> <span class="o">=</span> <span class="m">0</span><span class="k">u</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">_</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="m">0</span><span class="k">u</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">y</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">1.0</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">m</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">worker</span><span class="p">(</span><span class="n">receiver</span><span class="o">:</span> <span class="n">Receiver</span><span class="o">&lt;</span><span class="k">uint</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">sender</span><span class="o">:</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">m</span> <span class="o">=</span> <span class="m">0</span><span class="k">u</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="m">10_000_000</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">i</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">loop</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">receiver</span><span class="p">.</span><span class="n">try_recv</span><span class="p">().</span><span class="n">is_ok</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;worker(): Aborting calculation due to signal from main&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;worker(): Starting calculation&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;worker(): Calculation done&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">val</span> <span class="o">=</span> <span class="m">4.0</span> <span class="o">*</span> <span class="n">m</span><span class="p">.</span><span class="n">to_f32</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">i</span><span class="p">).</span><span class="n">to_f32</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">sender</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="o">::</span><span class="n">new</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">let</span> <span class="p">(</span><span class="n">send_from_worker_to_main</span><span class="p">,</span> <span class="n">receive_from_worker</span><span class="p">)</span> <span class="o">=</span> <span class="n">channel</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">let</span> <span class="p">(</span><span class="n">send_from_main_to_worker</span><span class="p">,</span> <span class="n">receive_from_main</span><span class="p">)</span>   <span class="o">=</span> <span class="n">channel</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;main(): start calculation and wait 10s&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">spawn</span><span class="p">(</span><span class="n">proc</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">worker</span><span class="p">(</span><span class="n">receive_from_main</span><span class="p">,</span> <span class="n">send_from_worker_to_main</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="n">timer</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">10_000</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;main(): Sending abort to worker&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">send_from_main_to_worker</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;main(): pi = {}&quot;</span><span class="p">,</span> <span class="n">receive_from_worker</span><span class="p">.</span><span class="n">recv</span><span class="p">());</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>What we do is as follows: We open two channels. One channel is for the
+<code>worker()</code> to send the value of pi to the <code>main()</code> function
+(<code>send_from_worker_to_main</code> and <code>receive_from_worker</code>). And
+another channel is to send a signal from <code>main()</code> to <code>worker()</code> to
+tell it to stop the calculation and return the result
+(<code>send_from_main_to_worker</code> and <code>receive_from_main</code>). To send
+something along a channel you just call <code>send(VALUE)</code> and to receive
+something you call <code>recv()</code>. It is important to note that <code>recv()</code> is
+blocking and waits for the next value to arrive. To either run a
+computation or abort we need to use the non-blocking version
+(<code>try_recv()</code>) in <code>worker()</code>. <code>try_recv()</code> returns a <code>Result</code> which
+can either be a wrapping of a real value (in this case <code>is_ok()</code>
+returns true) or and error (in which case <code>is_ok()</code> returns false).</p>
+
+<p>Running this produces the following output:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>uh@croissant:~/Personal/rust$ ./tasks-and-messages-2
+</span><span class='line'>main(): start calculation and wait 10s
+</span><span class='line'>worker(): Starting calculation
+</span><span class='line'>worker(): Calculation done
+</span><span class='line'>worker(): Starting calculation
+</span><span class='line'>worker(): Calculation done
+</span><span class='line'>worker(): Starting calculation
+</span><span class='line'>worker(): Calculation done
+</span><span class='line'>worker(): Starting calculation
+</span><span class='line'>worker(): Calculation done
+</span><span class='line'>worker(): Starting calculation
+</span><span class='line'>main(): Sending abort to worker
+</span><span class='line'>worker(): Calculation done
+</span><span class='line'>worker(): Aborting calculation due to signal from main
+</span><span class='line'>main(): pi = 3.141643</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>If you look closely at the result you will notice that we haven&rsquo;t yet
+implemented everything as described. The <code>worker()</code> only returns a
+result to <code>main()</code> once it has finished the current run of
+<code>montecarlopi()</code>. But what I originally described was that it should
+be possible to return a result <strong>while</strong> the the computation is still
+running.</p>
+
+<p>As this blog post has already gotten very long so we&rsquo;ll end it here
+nevertheless. In the next installment, we&rsquo;ll finish implementing the
+program and maybe even start cleaning up the code.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Rust: Compile Time Polymorphism]]></title>
+    <link href="http://bettong.net/2014/07/24/learning-rust-compile-time-polymorphism/"/>
+    <updated>2014-07-24T08:13:51+02:00</updated>
+    <id>http://bettong.net/2014/07/24/learning-rust-compile-time-polymorphism</id>
+    <content type="html"><![CDATA[<p>Coming from Ruby, polymorphism is a big part of the language. After
+all Ruby is a (mostly) object oriented language. Going to a language
+like Rust which is compiled and has an emphasis on being fast, run time
+polymorphism isn&rsquo;t that nice as it slows down the code.  This is
+because there&rsquo;s the overhead of selecting the right implementation of
+a method at runtime and also because there&rsquo;s no way these calls can be
+inlined.</p>
+
+<p>This is where compile time polymorphism comes in. Many times it is
+clear at compile time which concrete type we&rsquo;re going to use in the
+program. We could write it down explicitly, but it is nicer (and more
+flexible) if the compiler can figure it out for us.</p>
+
+<!-- more -->
+
+
+<p>Below is a small example of how this works. <code>Implementer1</code> and
+<code>Implementer2</code> are two structs that both implement the trait
+<code>TheTrait</code>. The third struct, <code>Container</code>, should be setup in such a
+way that it can store any struct that implements <code>TheTrait</code>.</p>
+
+<p>Setting this up correctly in Rust is a tiny bit complicated. First,
+you need to let Rust know that you want to use a type variable when
+defining <code>Container</code>. To do this you write <code>Container&lt;T&gt;</code> and then use
+<code>T</code> wherever you want to refer to this type in the struct definition.
+You will notice that this never mentions the trait <code>TheTrait</code>. The
+place where you actually restrict this variable to the trait is in the
+concrete implementation of the <code>Container</code> struct. Note that the
+variable I&rsquo;ve used in the definition of <code>Container</code> (called <code>T</code>) is
+different from the one I&rsquo;ve used in the implementation (called <code>X</code>).
+Normally you wouldn&rsquo;t do this as this makes the code much harder to
+understand, but I wanted to show that this is &ldquo;just&rdquo; a variable.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>compile-time-polymorphic-structs.rs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="cp">#[deriving(Show)]</span>
+</span><span class='line'><span class="n">struct</span> <span class="n">Implementer1</span><span class="p">;</span>
+</span><span class='line'><span class="cp">#[deriving(Show)]</span>
+</span><span class='line'><span class="n">struct</span> <span class="n">Implementer2</span><span class="p">;</span>
+</span><span class='line'><span class="cp">#[deriving(Show)]</span>
+</span><span class='line'><span class="n">struct</span> <span class="n">Container</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span> <span class="n">s</span><span class="o">:</span> <span class="n">T</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">trait</span> <span class="n">TheTrait</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">impl</span> <span class="n">TheTrait</span> <span class="k">for</span> <span class="n">Implementer1</span> <span class="p">{}</span>
+</span><span class='line'><span class="k">impl</span> <span class="n">TheTrait</span> <span class="k">for</span> <span class="n">Implementer2</span> <span class="p">{}</span>
+</span><span class='line'><span class="k">impl</span><span class="o">&lt;</span><span class="n">X</span><span class="o">:</span> <span class="n">TheTrait</span><span class="o">&gt;</span> <span class="n">Container</span><span class="o">&lt;</span><span class="n">X</span><span class="o">&gt;</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">c1</span> <span class="o">=</span> <span class="n">Container</span> <span class="p">{</span> <span class="n">s</span><span class="o">:</span> <span class="n">Implementer1</span> <span class="p">};</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">Container</span> <span class="p">{</span> <span class="n">s</span><span class="o">:</span> <span class="n">Implementer2</span> <span class="p">};</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;c1 = {}&quot;</span><span class="p">,</span> <span class="n">c1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;c2 = {}&quot;</span><span class="p">,</span> <span class="n">c2</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>To prove that I haven&rsquo;t told you any lies, let&rsquo;s compile the program
+and run it. You&rsquo;ll clearly see that <code>c1</code> contains <code>Implementer1</code> and
+<code>c2</code> contains <code>Implementer2</code>.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rustc compile-time-polymorphic-struct.rs
+</span><span class='line'>$ ./compile-time-polymorphic-struct
+</span><span class='line'>c1 = Container { s: Implementer1 }
+</span><span class='line'>c2 = Container { s: Implementer2 }</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>Next time we&rsquo;ll talk about how to do actual runtime polymorphism in
+Rust. After all it&rsquo;s not always possible to know the type at compile time!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My Emacs Configuration]]></title>
+    <link href="http://bettong.net/2014/05/15/my-emacs-configuration/"/>
+    <updated>2014-05-15T09:45:22+02:00</updated>
+    <id>http://bettong.net/2014/05/15/my-emacs-configuration</id>
+    <content type="html"><![CDATA[<p>As I currently work on a distributed team and we&rsquo;re trying to do more
+and more pair programming I decided that it&rsquo;s time to give Emacs a try
+again. Using <a href="http://tmate.io/">tmate</a> in combination with either
+Emacs or Vim seems to be the way to go due to the lower latency than a
+proper screen sharing solution.</p>
+
+<p>Right now my Emacs configuration is rather basic, but I think it could
+be a good starting point for other people, too. This is why I made it
+available as a <a href="https://github.com/ujh/emacs.d">Github project</a>.</p>
+
+<p>If you have any problems with it let me know and more importantly (at
+least for me personally) if you notice anything that I should do
+differently I&rsquo;d love to hear from you.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to Test Rust on Travis CI]]></title>
+    <link href="http://bettong.net/2014/05/09/how-to-test-rust-on-travis-ci/"/>
+    <updated>2014-05-09T16:07:51+02:00</updated>
+    <id>http://bettong.net/2014/05/09/how-to-test-rust-on-travis-ci</id>
+    <content type="html"><![CDATA[<p>Working with Ruby on Rails in my projects I&rsquo;m used to running continuous integration on <a href="https://travis-ci.org/">Travis CI</a>. As this is free of charge for open source projects projects I wanted to set it up for my Rust project <a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a>, too.</p>
+
+<p>At first I used the setup provided by <a href="http://www.rust-ci.org/help/">Rust CI</a>, but as the project page doesn&rsquo;t seem to be working 100% anymore and because the Debian package they provide of the rust nightly snapshot for some reason strips the Rust version number I decided to use the official nightly snapshots instead.</p>
+
+<!-- more -->
+
+
+<p>It was actually quite easy to do and if you want to test your Rust project on Travis CI yourself just drop that file into your project folder and adjust the last line to run your tests!</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>.travis.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">language</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">c</span>
+</span><span class='line'><span class="l-Scalar-Plain">install</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">curl -O http://static.rust-lang.org/dist/rust-nightly-x86_64-unknown-linux-gnu.tar.gz</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">tar xfz rust-nightly-x86_64-unknown-linux-gnu.tar.gz</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">(cd rust-nightly-x86_64-unknown-linux-gnu/ &amp;&amp; sudo ./install.sh)</span>
+</span><span class='line'><span class="l-Scalar-Plain">script</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">rustc --version</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">make</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Introducting Iomrascálaí]]></title>
+    <link href="http://bettong.net/2014/04/29/introducting-iomrascalai/"/>
+    <updated>2014-04-29T08:51:04+02:00</updated>
+    <id>http://bettong.net/2014/04/29/introducting-iomrascalai</id>
+    <content type="html"><![CDATA[<p>or <em>&ldquo;Help me learn Rust by pairing with me&rdquo;</em></p>
+
+<p>After years working in interpreted languages (Ruby, JavaScript) I recently discovered <a href="http://www.rust-lang.org/">Rust</a>. As I sadly don&rsquo;t have the opportunity to use Rust directly in a client project, I decided to come up with a toy project to help me learn the language.</p>
+
+<p>As Rust is supposedly good for programs that actually need raw speed (unlike the web apps I generally write) I decided to come back to one of my old time favourites: an artificial intelligence for the <a href="http://en.wikipedia.org/wiki/Go_(game)">game of Go</a>.</p>
+
+<p>I had already tried writing a few of those in recent years (including helping <a href="https://github.com/ujh/housebot">Jason House with his bot written in D</a>), but every time I had the problem that working alone wasn&rsquo;t very motivating so I never managed to produce a working program.</p>
+
+<p>To combat this I&rsquo;m trying to pair program with people (i.e. <em>you</em>) to keep me going. So if you&rsquo;re interested in either learning Rust with me or writing an AI for the game of Go, <a href="mailto:contact@urbanhafner.com">please get in touch</a>!</p>
+
+<!-- more -->
+
+
+<p>Currently (as of April 2014) the project is still in it&rsquo;s infancy (actually no code was written, yet), but please check out the <a href="https://github.com/ujh/iomrascalai">repository</a> and <a href="https://trello.com/b/NU4MXbao/iomrascalai">Trello board</a>.</p>
+
+<p>If you&rsquo;re new to Rust I suggest the <a href="http://static.rust-lang.org/doc/master/intro.html">30-minute Introduction to Rust</a>, <a href="http://static.rust-lang.org/doc/master/tutorial.html">The Rust Language Tutorial</a>, and <a href="http://rustbyexample.com/">Rust by Example</a> as a start. If you&rsquo;re new to the game of Go &hellip; well there&rsquo;s <a href="http://senseis.xmp.net/">a whole Wiki about it</a>! And for computer go related content the best place is the <a href="http://dvandva.org/pipermail/computer-go/">computer-go mailing list</a>.</p>
+
+<p><em>So, please get in touch so that we can get this started!</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pair Program With Me!]]></title>
+    <link href="http://bettong.net/2012/09/05/pair-program-with-me/"/>
+    <updated>2012-09-05T15:36:00+02:00</updated>
+    <id>http://bettong.net/2012/09/05/pair-program-with-me</id>
+    <content type="html"><![CDATA[<p>For most of my professional life as a programmer I&rsquo;ve been either working alone as a freelancer or in small teams that didn&rsquo;t practice pair programming. To improve my skills I want to start to pair program regularly with other people. If you&rsquo;re interested please contact me or just schedule a session on my <a href="http://doodle.com/urbanhafner">dedicated calendar</a>.</p>
+
+<p>I&rsquo;m open to almost any topic and programming language but I know Ruby and JavaScript (both in a web development context) best so that would be good starting point for me.</p>
+
+<p>As I live in Grenoble, France we&rsquo;re probably going to pair program remotely. I don&rsquo;t have much experience in doing that so please bear with me being a bit slow and having technical difficulties :)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My Reading List]]></title>
+    <link href="http://bettong.net/2012/06/28/my-reading-list/"/>
+    <updated>2012-06-28T12:50:00+02:00</updated>
+    <id>http://bettong.net/2012/06/28/my-reading-list</id>
+    <content type="html"><![CDATA[<p>I always found it interesting to see what other people in our field are reading. In that vain I thought I&rsquo;d share my <a href="http://bettong.net/reading-list">reading list</a>, too.</p>
+
+<p>At this point it&rsquo;s very much a work in progress and I&rsquo;ll fill in more details as time goes on. Feel free to suggest new titles in the comments of this blog post or on the reading list page itself.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Book Review: Land of Lisp by Conrad Barski]]></title>
+    <link href="http://bettong.net/2012/03/08/book-review-land-of-lisp-by-conrad-barski/"/>
+    <updated>2012-03-08T09:31:00+01:00</updated>
+    <id>http://bettong.net/2012/03/08/book-review-land-of-lisp-by-conrad-barski</id>
+    <content type="html"><![CDATA[<p><img src="http://bettong.net/images/posts/lol_small.jpg" />
+<a href="http://landoflisp.com/">Land of Lisp</a> by Conrad Barski is the second book in the <a href="http://rubyrogues.com/">Ruby Rogues</a> book club. As I enjoyed <a href="http://bettong.net/2012/03/02/eloquent-ruby-the-final-verdict/">Eloquent Ruby</a> (which was the first book we read) very much I thought I&rsquo;d give that one a try, too. And of course I hadn&rsquo;t used Lisp for a long time so I thought it would be a good refresher.</p>
+
+<p>The first thing you see when you pick up the book is the awesome cover. The somewhat poorly drawn <a href="http://lisperati.com/logo.html">Lisp Alien</a> that Conrad Barski created some years ago as the mascot of Lisp sets the tone for the book: This isn&rsquo;t just another dry textbook that explains everything that Lisp (Common Lisp in this case) does. It contains drawings and you learn not by writing yet another calculator but by writing games.</p>
+
+<p>Of course he&rsquo;s starting with the basic elements of Lisp so the first games are quite simple, but as the book progresses (he&rsquo;s even covering macros and lazy programming) they get more complex and in the end we&rsquo;re even presented with a board game with a GUI that you play in a browser against three computer players!</p>
+
+<p>Ideally you should follow along by typing in the code and experimenting a bit to really understand all the concepts. But up to a certain point in the book it&rsquo;s also OK to just read along. That&rsquo;s what I did because I read the book in the evening on the couch or in the bed. Of course I didn&rsquo;t understand everything with this approach, but it worked well enough for me as most code examples are explained in detail.</p>
+
+<p>All in all it was a fun read and it was great so see how you program in a language where code and data are more or less equal. I&rsquo;m not sure how much of that will translate into my Ruby or JavaScript programming but what the heck it was a fun read!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using Sass-rails 3.1.5 Without the Asset Pipeline on Rails 3.1.4]]></title>
+    <link href="http://bettong.net/2012/03/07/using-sass-rails-3-dot-1-5-without-the-asset-pipeline-on-rails-3-dot-1-4/"/>
+    <updated>2012-03-07T17:29:00+01:00</updated>
+    <id>http://bettong.net/2012/03/07/using-sass-rails-3-dot-1-5-without-the-asset-pipeline-on-rails-3-dot-1-4</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m currently upgrading one of the Ruby on Rails apps from Rails 3.0 to Rails 3.1. As it so happens we&rsquo;re using <a href="http://activeadmin.info/">ActiveAdmin</a> with it which requires <a href="https://github.com/rails/sass-rails">sass-rails</a> on Rails 3.1. At the time of writing the latest version of <a href="https://github.com/rails/sass-rails">sass-rails</a> is 3.1.5 and it requires the asset pipeline to be enabled. But I don&rsquo;t want to upgrade from <a href="http://documentcloud.github.com/jammit/">jammit</a> at this time so I have to disable the asset pipeline. But with the asset pipeline disabled the app can&rsquo;t start due to <a href="https://github.com/rails/sass-rails">sass-rails</a>. So here&rsquo;s what I needed to do to make it work.</p>
+
+<h3>config/environment.rb</h3>
+
+<p>I had to change it so that it looks like the code snippet below. Basically this fakes the asset pipeline for the benefit of <a href="https://github.com/rails/sass-rails">sass-rails</a>.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Load the rails application</span>
+</span><span class='line'><span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../application&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">Webanalyzer</span><span class="p">:</span><span class="ss">:Application</span><span class="o">.</span><span class="n">assets</span> <span class="o">=</span> <span class="no">Struct</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:context_class</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">append_path</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">);</span> <span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Class</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Initialize the rails application</span>
+</span><span class='line'><span class="ss">Webanalyzer</span><span class="p">:</span><span class="ss">:Application</span><span class="o">.</span><span class="n">initialize!</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<h3>config/application.rb</h3>
+
+<p>Disable compilation of the assets alongside disabling the asset pipeline as a whole.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">compile</span> <span class="o">=</span> <span class="kp">false</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<h3>Done!</h3>
+
+<p>The two small changes fixed <a href="https://github.com/rails/sass-rails">sass-rails</a> without the asset pipeline for now. Hopefully <a href="https://github.com/rails/sass-rails/pull/84">pull request #84</a> will be merged into sass-rails soon and a new version will be released so that this hack won&rsquo;t be necessary. Until then this is the most basic fix I could come up with.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Eloquent Ruby -- the Final Verdict]]></title>
+    <link href="http://bettong.net/2012/03/02/eloquent-ruby-the-final-verdict/"/>
+    <updated>2012-03-02T21:25:00+01:00</updated>
+    <id>http://bettong.net/2012/03/02/eloquent-ruby-the-final-verdict</id>
+    <content type="html"><![CDATA[<p>This will be my final post on Eloquent Ruby by Russ Olsen. All in all I really liked the book and I think that if you&rsquo;re serious about being a Ruby developer this book should be in your library.</p>
+
+<p>It is a valuable book for several reasons. First of all it is as close as humanly possible to a definite style guide for programming in Ruby. This doesn&rsquo;t just cover formatting your code and if or when to use camel case but more importantly when and how to use certain parts of the language. Secondly, it contains a lot of best practices, especially on the use of modules, classes and meta-programming. And thirdly it explains some of the more advances parts of Ruby extremely well. For example I never knew the difference between <code>lambda</code> and <code>Proc.new</code> and what hooks Ruby provides to help you with meta-programming.</p>
+
+<p>So please do yourself a favor and read the book. More than once!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Notes on Eloquent Ruby #3]]></title>
+    <link href="http://bettong.net/2011/11/07/notes-on-eloquent-ruby-number-3/"/>
+    <updated>2011-11-07T15:11:00+01:00</updated>
+    <id>http://bettong.net/2011/11/07/notes-on-eloquent-ruby-number-3</id>
+    <content type="html"><![CDATA[<p>In this post I&rsquo;m focusing on chapter 13: <em>Get the Behavior You Need with Singleton and Class Methods</em>. This chapter was a nice wow moment for me, but also a bit embarrassing as this isn&rsquo;t really advanced Ruby knowledge but I&rsquo;ve managed to never really learn it. So what does the chapter talk about? It talks about Ruby singleton and class methods and that they&rsquo;re basically the same thing under the hood!</p>
+
+<h3>What?</h3>
+
+<p>So we all know that we can define class methods like this:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">DennisMoore</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">riding_through_the_night</span>
+</span><span class='line'>    <span class="c1"># ...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>And we also know that this is equivalent to the following:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">DennisMoore</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nc">DennisMoore</span><span class="o">.</span><span class="nf">riding_through_the_night</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>Now let&rsquo;s compare this to defining a method on an object instead of a class (aka defining a singleton method):</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">obj</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="k">def</span> <span class="nc">obj</span><span class="o">.</span><span class="nf">bla</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>Quite similar that code, isn&rsquo;t it? This could just be a coincidence, but of course being a nicely designed language it isn&rsquo;t.</p>
+
+<h3>So how does it work?</h3>
+
+<p>Quite easily actually. As you know Ruby is an object oriented language down to it&rsquo;s core. So it comes naturally that classes are just objects, too. So when you are defining class methods you are actually defining singleton methods on the instance of <tt>Class</tt> that defines your class (<tt>DennisMoore</tt> in this case) which is no different from defining singleton methods on &ldquo;normal&rdquo; objects!</p>
+
+<h3>And where are those methods stored?</h3>
+
+<p>Now that we know that we are just defining singleton methods the only question remaining is where these methods are stored? Remember, when we are calling a method on an object, Ruby searches for the method in the class of the object, then the super class and so on until it finds it. But of course we can&rsquo;t put our singleton methods into the class as we only want these methods to be defined for that single object. So we could come up with some hack that stores the methods somehow in the instance. Or, we could do the elegant thing and add a special class to each object that sits between it and the &ldquo;real&rdquo; class of that object. This way we can use the normal rules of inheritance for singleton methods. This is of course what Ruby does. It calls it the <em>singleton class</em> even.</p>
+
+<h3>Wrapping up</h3>
+
+<p>So to summarize: Each Ruby object has a <em>singleton class</em> in the method lookup path between itself and its class. That&rsquo;s where singleton methods are defined. And class methods are just a special case of this as classes themselves are just objects (and instances of class <tt>Class</tt>).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Notes on Eloquent Ruby #2]]></title>
+    <link href="http://bettong.net/2011/11/03/notes-on-eloquent-ruby-number-2/"/>
+    <updated>2011-11-03T16:31:00+01:00</updated>
+    <id>http://bettong.net/2011/11/03/notes-on-eloquent-ruby-number-2</id>
+    <content type="html"><![CDATA[<p>In this second post we look at chapter 10: <em>Construct Your Classes from Short, Focused Methods</em>. The first thing that comes to mind is of course that methods should be short. Some years ago my rule of thumb was that a method should fit on the screen. But now that I&rsquo;m using a 27&#8217;&lsquo; screen that doesn&rsquo;t hold true anymore, of course. Also this misses the important point of the chapter and that is: use the <em>composed method</em> technique for your methods. Paraphrasing the book the method written using the composed method technique should have three characteristics:</p>
+
+<ol>
+<li>They should do a single thing only</li>
+<li>They should operate on a single conceptual level, i.e. they shouldn&rsquo;t mix high-level and low-level things</li>
+<li>They need to have a descriptive names, i.e. names that describe the purpose of the method</li>
+</ol>
+
+
+<p>Adhering to these rules gives you nicely structured methods that should be easily understandable and as a side benefit they are also easily testable as each method only does one small thing and therefore there&rsquo;s no need for extensive mocking and setting up context.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Notes on Eloquent Ruby #1]]></title>
+    <link href="http://bettong.net/2011/10/27/notes-on-eloquent-ruby-number-1/"/>
+    <updated>2011-10-27T13:47:00+02:00</updated>
+    <id>http://bettong.net/2011/10/27/notes-on-eloquent-ruby-number-1</id>
+    <content type="html"><![CDATA[<p>The <a href="http://rubyrogues.com/">Ruby Rogues</a> book club is currently reading
+Eloquent Ruby and I thought I&rsquo;d tag along and read the book, too. I&rsquo;ll be
+posting my thoughts on the book in this post and in a few future posts.</p>
+
+<h2>Chapter 3: Take Advantage of Ruby&rsquo;s Smart Collections</h2>
+
+<p>This chapter details the use of the Hash and Array classes and that
+they can be used instead of specialized custom classes in most cases.
+That&rsquo;s not really surprising and also that&rsquo;s not what I&rsquo;m taking away
+from this chapter. The good point are the last two pages where he
+mentions that there are cases where you shouldn&rsquo;t use Array or Hash but
+rather use specialized collections when they make sense.</p>
+
+<p>His example is the following: Imagine that we want to know if a word
+appears in a document. We could either use a Hash for this</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">word_is_there</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="n">words</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">word</span><span class="o">|</span> <span class="n">word_is_there</span><span class="o">[</span><span class="n">word</span><span class="o">]</span> <span class="o">=</span> <span class="kp">true</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>or an Array</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">unique</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="n">words</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">word</span><span class="o">|</span> <span class="n">unique</span> <span class="o">&lt;&lt;</span> <span class="n">word</span> <span class="k">unless</span> <span class="n">unique</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">word</span><span class="p">)}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>However both approaches aren&rsquo;t ideal because in the case of the Hash we
+aren&rsquo;t interested in the values we store and in the case of the Array we
+need to make sure the Array contains no duplicates. It turns out that in
+this case we should use the Ruby Set class because it&rsquo;s just made for
+this:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;set&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">word_set</span> <span class="o">=</span> <span class="no">Set</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<h2>Other collections from the standard library</h2>
+
+<p>This got me thinking and I went through the standard library to look for
+other collections that you make overlook:</p>
+
+<h3>Struct</h3>
+
+<p>Many times we use Hashes to store data like this:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">first_name</span><span class="p">:</span> <span class="s2">&quot;Jon&quot;</span><span class="p">,</span> <span class="n">last_name</span><span class="p">:</span> <span class="s2">&quot;Snow&quot;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<p>If we need to pass that data around a lot it might be cleaner to create
+a dedicated class for it. However if it&rsquo;s just a container for the data
+and doesn&rsquo;t have any other functionality we could also use a struct.
+This way we get a more expressive name:</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Struct</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="ss">:first_name</span><span class="p">,</span> <span class="ss">:last_name</span><span class="p">)</span>
+</span><span class='line'><span class="ss">Struct</span><span class="p">:</span><span class="ss">:Name</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Jon&quot;</span><span class="p">,</span> <span class="s2">&quot;Snow&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<h3>Matrix and Vector</h3>
+
+<p>Matrices and Vectors could be represented by Arrays but there&rsquo;s really
+no point in not using the Matrix and Vector classes provided by the matrix
+standard library.</p>
+
+<h3>Anything else?</h3>
+
+<p>A quick look through the standard library didn&rsquo;t reveal any other
+collections. At least I didn&rsquo;t see any, but I&rsquo;d be happy to be proven
+wrong.</p>
+]]></content>
+  </entry>
+  
+</feed>

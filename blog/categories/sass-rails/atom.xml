@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: sass-rails | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/sass-rails/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using sass-rails 3.1.5 without the asset pipeline on Rails 3.1.4]]></title>
+    <link href="http://bettong.net/2012/03/07/using-sass-rails-3-dot-1-5-without-the-asset-pipeline-on-rails-3-dot-1-4/"/>
+    <updated>2012-03-07T17:29:00+01:00</updated>
+    <id>http://bettong.net/2012/03/07/using-sass-rails-3-dot-1-5-without-the-asset-pipeline-on-rails-3-dot-1-4</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m currently upgrading one of the Ruby on Rails apps from Rails 3.0 to Rails 3.1. As it so happens we&rsquo;re using <a href="http://activeadmin.info/">ActiveAdmin</a> with it which requires <a href="https://github.com/rails/sass-rails">sass-rails</a> on Rails 3.1. At the time of writing the latest version of <a href="https://github.com/rails/sass-rails">sass-rails</a> is 3.1.5 and it requires the asset pipeline to be enabled. But I don&rsquo;t want to upgrade from <a href="http://documentcloud.github.com/jammit/">jammit</a> at this time so I have to disable the asset pipeline. But with the asset pipeline disabled the app can&rsquo;t start due to <a href="https://github.com/rails/sass-rails">sass-rails</a>. So here&rsquo;s what I needed to do to make it work.</p>
+
+<h3>config/environment.rb</h3>
+
+<p>I had to change it so that it looks like the code snippet below. Basically this fakes the asset pipeline for the benefit of <a href="https://github.com/rails/sass-rails">sass-rails</a>.</p>
+
+<pre><code class="ruby"># Load the rails application
+require File.expand_path('../application', __FILE__)
+
+Webanalyzer::Application.assets = Struct.new(:context_class) do
+  def append_path(*args); end
+end.new(Class.new)
+
+# Initialize the rails application
+Webanalyzer::Application.initialize!
+</code></pre>
+
+<h3>config/application.rb</h3>
+
+<p>Disable compilation of the assets alongside disabling the asset pipeline as a whole.</p>
+
+<pre><code class="ruby">config.assets.enabled = false
+config.assets.compile = false
+</code></pre>
+
+<h3>Done!</h3>
+
+<p>The two small changes fixed <a href="https://github.com/rails/sass-rails">sass-rails</a> without the asset pipeline for now. Hopefully <a href="https://github.com/rails/sass-rails/pull/84">pull request #84</a> will be merged into sass-rails soon and a new version will be released so that this hack won&rsquo;t be necessary. Until then this is the most basic fix I could come up with.</p>
+]]></content>
+  </entry>
+  
+</feed>

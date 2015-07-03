@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: goos | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/goos/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Two talks on isolating your domain logic from Rails]]></title>
+    <link href="http://bettong.net/2014/08/08/two-talks-on-isolating-your-domain-logic-from-rails/"/>
+    <updated>2014-08-08T09:29:49+02:00</updated>
+    <id>http://bettong.net/2014/08/08/two-talks-on-isolating-your-domain-logic-from-rails</id>
+    <content type="html"><![CDATA[<p>Recently one of my co-workers pointed me to this great talk by the
+late Jim Weirich about separating the domain logic of your Ruby on
+Rails app from &ldquo;the plumbing&rdquo;:</p>
+
+<!-- more -->
+
+
+
+
+<iframe width="640" height="360"
+src="//www.youtube-nocookie.com/embed/tg5RFeSfBM4?rel=0"
+frameborder="0" allowfullscreen></iframe>
+
+
+<p>This the led me to the Hexagonal Rails talk by Matt Wynne:</p>
+
+<iframe width="640" height="360"
+src="//www.youtube-nocookie.com/embed/CGN4RFkhH2M?rel=0"
+frameborder="0" allowfullscreen></iframe>
+
+
+<p>Now, I&rsquo;m off to finally read
+<a href="http://www.growing-object-oriented-software.com/">Growing Object-Oriented Software Guided by Tests</a>
+and try to give decoupling my logic from the Ruby on Rails guts a real try!</p>
+]]></content>
+  </entry>
+  
+</feed>

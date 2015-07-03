@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: pair programming | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/pair-programming/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Introducting Iomrascálaí]]></title>
+    <link href="http://bettong.net/2014/04/29/introducting-iomrascalai/"/>
+    <updated>2014-04-29T08:51:04+02:00</updated>
+    <id>http://bettong.net/2014/04/29/introducting-iomrascalai</id>
+    <content type="html"><![CDATA[<p>or <em>&ldquo;Help me learn Rust by pairing with me&rdquo;</em></p>
+
+<p>After years working in interpreted languages (Ruby, JavaScript) I recently discovered <a href="http://www.rust-lang.org/">Rust</a>. As I sadly don&rsquo;t have the opportunity to use Rust directly in a client project, I decided to come up with a toy project to help me learn the language.</p>
+
+<p>As Rust is supposedly good for programs that actually need raw speed (unlike the web apps I generally write) I decided to come back to one of my old time favourites: an artificial intelligence for the <a href="http://en.wikipedia.org/wiki/Go_(game)">game of Go</a>.</p>
+
+<p>I had already tried writing a few of those in recent years (including helping <a href="https://github.com/ujh/housebot">Jason House with his bot written in D</a>), but every time I had the problem that working alone wasn&rsquo;t very motivating so I never managed to produce a working program.</p>
+
+<p>To combat this I&rsquo;m trying to pair program with people (i.e. <em>you</em>) to keep me going. So if you&rsquo;re interested in either learning Rust with me or writing an AI for the game of Go, <a href="mailto:contact@urbanhafner.com">please get in touch</a>!</p>
+
+<!-- more -->
+
+
+<p>Currently (as of April 2014) the project is still in it&rsquo;s infancy (actually no code was written, yet), but please check out the <a href="https://github.com/ujh/iomrascalai">repository</a> and <a href="https://trello.com/b/NU4MXbao/iomrascalai">Trello board</a>.</p>
+
+<p>If you&rsquo;re new to Rust I suggest the <a href="http://static.rust-lang.org/doc/master/intro.html">30-minute Introduction to Rust</a>, <a href="http://static.rust-lang.org/doc/master/tutorial.html">The Rust Language Tutorial</a>, and <a href="http://rustbyexample.com/">Rust by Example</a> as a start. If you&rsquo;re new to the game of Go &hellip; well there&rsquo;s <a href="http://senseis.xmp.net/">a whole Wiki about it</a>! And for computer go related content the best place is the <a href="http://dvandva.org/pipermail/computer-go/">computer-go mailing list</a>.</p>
+
+<p><em>So, please get in touch so that we can get this started!</em></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pair program with me!]]></title>
+    <link href="http://bettong.net/2012/09/05/pair-program-with-me/"/>
+    <updated>2012-09-05T15:36:00+02:00</updated>
+    <id>http://bettong.net/2012/09/05/pair-program-with-me</id>
+    <content type="html"><![CDATA[<p>For most of my professional life as a programmer I&rsquo;ve been either working alone as a freelancer or in small teams that didn&rsquo;t practice pair programming. To improve my skills I want to start to pair program regularly with other people. If you&rsquo;re interested please contact me or just schedule a session on my <a href="http://doodle.com/urbanhafner">dedicated calendar</a>.</p>
+
+<p>I&rsquo;m open to almost any topic and programming language but I know Ruby and JavaScript (both in a web development context) best so that would be good starting point for me.</p>
+
+<p>As I live in Grenoble, France we&rsquo;re probably going to pair program remotely. I don&rsquo;t have much experience in doing that so please bear with me being a bit slow and having technical difficulties :)</p>
+]]></content>
+  </entry>
+  
+</feed>

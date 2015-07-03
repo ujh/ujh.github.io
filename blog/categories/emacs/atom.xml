@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: emacs | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/emacs/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My Emacs configuration]]></title>
+    <link href="http://bettong.net/2014/05/15/my-emacs-configuration/"/>
+    <updated>2014-05-15T09:45:22+02:00</updated>
+    <id>http://bettong.net/2014/05/15/my-emacs-configuration</id>
+    <content type="html"><![CDATA[<p>As I currently work on a distributed team and we&rsquo;re trying to do more
+and more pair programming I decided that it&rsquo;s time to give Emacs a try
+again. Using <a href="http://tmate.io/">tmate</a> in combination with either
+Emacs or Vim seems to be the way to go due to the lower latency than a
+proper screen sharing solution.</p>
+
+<p>Right now my Emacs configuration is rather basic, but I think it could
+be a good starting point for other people, too. This is why I made it
+available as a <a href="https://github.com/ujh/emacs.d">Github project</a>.</p>
+
+<p>If you have any problems with it let me know and more importantly (at
+least for me personally) if you notice anything that I should do
+differently I&rsquo;d love to hear from you.</p>
+]]></content>
+  </entry>
+  
+</feed>

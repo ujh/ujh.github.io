@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: book club | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/book-club/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Book Review: Land of Lisp by Conrad Barski]]></title>
+    <link href="http://bettong.net/2012/03/08/book-review-land-of-lisp-by-conrad-barski/"/>
+    <updated>2012-03-08T09:31:00+01:00</updated>
+    <id>http://bettong.net/2012/03/08/book-review-land-of-lisp-by-conrad-barski</id>
+    <content type="html"><![CDATA[<p><img src="http://bettong.net/images/posts/lol_small.jpg" />
+<a href="http://landoflisp.com/">Land of Lisp</a> by Conrad Barski is the second book in the <a href="http://rubyrogues.com/">Ruby Rogues</a> book club. As I enjoyed <a href="http://bettong.net/2012/03/02/eloquent-ruby-the-final-verdict/">Eloquent Ruby</a> (which was the first book we read) very much I thought I&rsquo;d give that one a try, too. And of course I hadn&rsquo;t used Lisp for a long time so I thought it would be a good refresher.</p>
+
+<p>The first thing you see when you pick up the book is the awesome cover. The somewhat poorly drawn <a href="http://lisperati.com/logo.html">Lisp Alien</a> that Conrad Barski created some years ago as the mascot of Lisp sets the tone for the book: This isn&rsquo;t just another dry textbook that explains everything that Lisp (Common Lisp in this case) does. It contains drawings and you learn not by writing yet another calculator but by writing games.</p>
+
+<p>Of course he&rsquo;s starting with the basic elements of Lisp so the first games are quite simple, but as the book progresses (he&rsquo;s even covering macros and lazy programming) they get more complex and in the end we&rsquo;re even presented with a board game with a GUI that you play in a browser against three computer players!</p>
+
+<p>Ideally you should follow along by typing in the code and experimenting a bit to really understand all the concepts. But up to a certain point in the book it&rsquo;s also OK to just read along. That&rsquo;s what I did because I read the book in the evening on the couch or in the bed. Of course I didn&rsquo;t understand everything with this approach, but it worked well enough for me as most code examples are explained in detail.</p>
+
+<p>All in all it was a fun read and it was great so see how you program in a language where code and data are more or less equal. I&rsquo;m not sure how much of that will translate into my Ruby or JavaScript programming but what the heck it was a fun read!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Eloquent Ruby -- The final verdict]]></title>
+    <link href="http://bettong.net/2012/03/02/eloquent-ruby-the-final-verdict/"/>
+    <updated>2012-03-02T21:25:00+01:00</updated>
+    <id>http://bettong.net/2012/03/02/eloquent-ruby-the-final-verdict</id>
+    <content type="html"><![CDATA[<p>This will be my final post on Eloquent Ruby by Russ Olsen. All in all I really liked the book and I think that if you&rsquo;re serious about being a Ruby developer this book should be in your library.</p>
+
+<p>It is a valuable book for several reasons. First of all it is as close as humanly possible to a definite style guide for programming in Ruby. This doesn&rsquo;t just cover formatting your code and if or when to use camel case but more importantly when and how to use certain parts of the language. Secondly, it contains a lot of best practices, especially on the use of modules, classes and meta-programming. And thirdly it explains some of the more advances parts of Ruby extremely well. For example I never knew the difference between <code>lambda</code> and <code>Proc.new</code> and what hooks Ruby provides to help you with meta-programming.</p>
+
+<p>So please do yourself a favor and read the book. More than once!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Notes on Eloquent Ruby #3]]></title>
+    <link href="http://bettong.net/2011/11/07/notes-on-eloquent-ruby-number-3/"/>
+    <updated>2011-11-07T15:11:00+01:00</updated>
+    <id>http://bettong.net/2011/11/07/notes-on-eloquent-ruby-number-3</id>
+    <content type="html"><![CDATA[<p>In this post I&rsquo;m focusing on chapter 13: <em>Get the Behavior You Need with Singleton and Class Methods</em>. This chapter was a nice wow moment for me, but also a bit embarrassing as this isn&rsquo;t really advanced Ruby knowledge but I&rsquo;ve managed to never really learn it. So what does the chapter talk about? It talks about Ruby singleton and class methods and that they&rsquo;re basically the same thing under the hood!</p>
+
+<h3>What?</h3>
+
+<p>So we all know that we can define class methods like this:</p>
+
+<pre><code class="ruby">class DennisMoore
+  def self.riding_through_the_night
+    # ...
+  end
+end
+</code></pre>
+
+<p>And we also know that this is equivalent to the following:</p>
+
+<pre><code class="ruby">class DennisMoore
+end
+
+def DennisMoore.riding_through_the_night
+  # ...
+end
+</code></pre>
+
+<p>Now let&rsquo;s compare this to defining a method on an object instead of a class (aka defining a singleton method):</p>
+
+<pre><code class="ruby">obj = Object.new
+def obj.bla
+  # ...
+end
+</code></pre>
+
+<p>Quite similar that code, isn&rsquo;t it? This could just be a coincidence, but of course being a nicely designed language it isn&rsquo;t.</p>
+
+<h3>So how does it work?</h3>
+
+<p>Quite easily actually. As you know Ruby is an object oriented language down to it&rsquo;s core. So it comes naturally that classes are just objects, too. So when you are defining class methods you are actually defining singleton methods on the instance of <tt>Class</tt> that defines your class (<tt>DennisMoore</tt> in this case) which is no different from defining singleton methods on &ldquo;normal&rdquo; objects!</p>
+
+<h3>And where are those methods stored?</h3>
+
+<p>Now that we know that we are just defining singleton methods the only question remaining is where these methods are stored? Remember, when we are calling a method on an object, Ruby searches for the method in the class of the object, then the super class and so on until it finds it. But of course we can&rsquo;t put our singleton methods into the class as we only want these methods to be defined for that single object. So we could come up with some hack that stores the methods somehow in the instance. Or, we could do the elegant thing and add a special class to each object that sits between it and the &ldquo;real&rdquo; class of that object. This way we can use the normal rules of inheritance for singleton methods. This is of course what Ruby does. It calls it the <em>singleton class</em> even.</p>
+
+<h3>Wrapping up</h3>
+
+<p>So to summarize: Each Ruby object has a <em>singleton class</em> in the method lookup path between itself and its class. That&rsquo;s where singleton methods are defined. And class methods are just a special case of this as classes themselves are just objects (and instances of class <tt>Class</tt>).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Notes on Eloquent Ruby #2]]></title>
+    <link href="http://bettong.net/2011/11/03/notes-on-eloquent-ruby-number-2/"/>
+    <updated>2011-11-03T16:31:00+01:00</updated>
+    <id>http://bettong.net/2011/11/03/notes-on-eloquent-ruby-number-2</id>
+    <content type="html"><![CDATA[<p>In this second post we look at chapter 10: <em>Construct Your Classes from Short, Focused Methods</em>. The first thing that comes to mind is of course that methods should be short. Some years ago my rule of thumb was that a method should fit on the screen. But now that I&rsquo;m using a 27&#8217;&lsquo; screen that doesn&rsquo;t hold true anymore, of course. Also this misses the important point of the chapter and that is: use the <em>composed method</em> technique for your methods. Paraphrasing the book the method written using the composed method technique should have three characteristics:</p>
+
+<ol>
+<li>They should do a single thing only</li>
+<li>They should operate on a single conceptual level, i.e. they shouldn&rsquo;t mix high-level and low-level things</li>
+<li>They need to have a descriptive names, i.e. names that describe the purpose of the method</li>
+</ol>
+
+
+<p>Adhering to these rules gives you nicely structured methods that should be easily understandable and as a side benefit they are also easily testable as each method only does one small thing and therefore there&rsquo;s no need for extensive mocking and setting up context.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Notes on Eloquent Ruby #1]]></title>
+    <link href="http://bettong.net/2011/10/27/notes-on-eloquent-ruby-number-1/"/>
+    <updated>2011-10-27T13:47:00+02:00</updated>
+    <id>http://bettong.net/2011/10/27/notes-on-eloquent-ruby-number-1</id>
+    <content type="html"><![CDATA[<p>The <a href="http://rubyrogues.com/">Ruby Rogues</a> book club is currently reading
+Eloquent Ruby and I thought I&rsquo;d tag along and read the book, too. I&rsquo;ll be
+posting my thoughts on the book in this post and in a few future posts.</p>
+
+<h2>Chapter 3: Take Advantage of Ruby&rsquo;s Smart Collections</h2>
+
+<p>This chapter details the use of the Hash and Array classes and that
+they can be used instead of specialized custom classes in most cases.
+That&rsquo;s not really surprising and also that&rsquo;s not what I&rsquo;m taking away
+from this chapter. The good point are the last two pages where he
+mentions that there are cases where you shouldn&rsquo;t use Array or Hash but
+rather use specialized collections when they make sense.</p>
+
+<p>His example is the following: Imagine that we want to know if a word
+appears in a document. We could either use a Hash for this
+<code>ruby
+word_is_there = {}
+words.each {|word| word_is_there[word] = true }
+</code>
+or an Array
+<code>ruby
+unique = []
+words.each {|word| unique &lt;&lt; word unless unique.include?(word)}
+</code>
+However both approaches aren&rsquo;t ideal because in the case of the Hash we
+aren&rsquo;t interested in the values we store and in the case of the Array we
+need to make sure the Array contains no duplicates. It turns out that in
+this case we should use the Ruby Set class because it&rsquo;s just made for
+this:</p>
+
+<pre><code>require 'set'
+
+word_set = Set.new(words)
+</code></pre>
+
+<h2>Other collections from the standard library</h2>
+
+<p>This got me thinking and I went through the standard library to look for
+other collections that you make overlook:</p>
+
+<h3>Struct</h3>
+
+<p>Many times we use Hashes to store data like this:</p>
+
+<pre><code class="ruby">data = {first_name: "Jon", last_name: "Snow"}
+</code></pre>
+
+<p>If we need to pass that data around a lot it might be cleaner to create
+a dedicated class for it. However if it&rsquo;s just a container for the data
+and doesn&rsquo;t have any other functionality we could also use a struct.
+This way we get a more expressive name:</p>
+
+<pre><code>Struct.new("Name", :first_name, :last_name)
+Struct::Name.new("Jon", "Snow")
+</code></pre>
+
+<h3>Matrix and Vector</h3>
+
+<p>Matrices and Vectors could be represented by Arrays but there&rsquo;s really
+no point in not using the Matrix and Vector classes provided by the matrix
+standard library.</p>
+
+<h3>Anything else?</h3>
+
+<p>A quick look through the standard library didn&rsquo;t reveal any other
+collections. At least I didn&rsquo;t see any, but I&rsquo;d be happy to be proven
+wrong.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: learning rust tasks and messages | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/learning-rust-tasks-and-messages/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Rust: Tasks and Messages Part 2]]></title>
+    <link href="http://bettong.net/2014/08/01/learning-rust-tasks-and-messages-part-2/"/>
+    <updated>2014-08-01T08:06:26+02:00</updated>
+    <id>http://bettong.net/2014/08/01/learning-rust-tasks-and-messages-part-2</id>
+    <content type="html"><![CDATA[<p><em>The code examples of this blog post are available in the Git
+ repository
+ <a href="http://github.com/ujh/tasks-and-messages">tasks-and-messages</a>.</em></p>
+
+<p>In
+<a href="/2014/07/28/learning-rust-tasks-and-messages-part-1/">part 1 of this series</a>
+we started implementing our Pi calculation using the Monte Carlo
+method. We ended with code that works, but that still doesn&rsquo;t return a
+value after exactly 10 seconds. In this part we&rsquo;ll finish the implementation.</p>
+
+<p>The problem with the previous implementation was that the <code>worker()</code>
+function had to wait for <code>montecarlopi()</code> to return, before it could
+react to the message from <code>main()</code>. The solution to this should now be
+obvious: Let&rsquo;s put the <code>montecarlopi()</code> calculation in a separate
+task. Then <code>worker()</code> can listen to messages from both <code>main()</code> and
+<code>montecarlopi()</code> at the same time.</p>
+
+<!-- more -->
+
+
+<p>Here&rsquo;s the code:</p>
+
+<pre><code class="rust tasks-and-messages-3.rs">use std::io::Timer;
+use std::rand::random;
+
+fn montecarlopi(n: uint, sender: Sender&lt;uint&gt;) {
+    println!("montecarlopi(): Starting calculation");
+    let mut m = 0u;
+    for _ in range(0u, n) {
+        let x = random::&lt;f32&gt;();
+        let y = random::&lt;f32&gt;();
+        if (x*x + y*y) &lt; 1.0 {
+            m = m + 1;
+        }
+    }
+    println!("montecarlopi(): Calculation done");
+    sender.send_opt(m);
+}
+
+fn worker(receive_from_main: Receiver&lt;uint&gt;, send_to_main: Sender&lt;f32&gt;) {
+    let mut m = 0u;
+    let n = 10_000_000;
+    let mut i = 0;
+    let (sender, receive_from_montecarlo) = channel();
+    let initial_sender = sender.clone();
+    spawn(proc() {
+        montecarlopi(n, initial_sender);
+    });
+    let mut timer = Timer::new().unwrap();
+    loop {
+        if receive_from_main.try_recv().is_ok() {
+            println!("worker(): Aborting calculation due to signal from main");
+            break;
+        }
+        let montecarlopi_result = receive_from_montecarlo.try_recv();
+        if montecarlopi_result.is_ok() {
+            m = m + montecarlopi_result.unwrap();
+            i = i + 1;
+            let sender_clone = sender.clone();
+            spawn(proc() {
+                montecarlopi(n, sender_clone);
+            });
+        }
+        timer.sleep(50);
+    }
+    let val = 4.0 * m.to_f32().unwrap()/(n*i).to_f32().unwrap();
+    send_to_main.send(val);
+}
+
+fn main() {
+    let mut timer = Timer::new().unwrap();
+    let (send_from_worker_to_main, receive_from_worker) = channel();
+    let (send_from_main_to_worker, receive_from_main)   = channel();
+    println!("main(): start calculation and wait 10s");
+    spawn(proc() {
+        worker(receive_from_main, send_from_worker_to_main);
+    });
+    timer.sleep(10_000);
+    println!("main(): Sending abort to worker");
+    send_from_main_to_worker.send(0);
+    println!("main(): pi = {}", receive_from_worker.recv());
+}
+</code></pre>
+
+<p>And here&rsquo;s the output from running the program. As you can see from
+lines 12-15 it&rsquo;s now working as intended. First <code>main()</code> sends the
+signal, then <code>worker()</code> reacts immediately by sending the latest result to
+<code>main()</code>, and <code>montecarlopi()</code> is left to finish its calculation (but
+the result is discarded).</p>
+
+<pre><code class="plain">$ ./tasks-and-messages-3
+main(): start calculation and wait 10s
+montecarlopi(): Starting calculation
+montecarlopi(): Calculation done
+montecarlopi(): Starting calculation
+montecarlopi(): Calculation done
+montecarlopi(): Starting calculation
+montecarlopi(): Calculation done
+montecarlopi(): Starting calculation
+montecarlopi(): Calculation done
+montecarlopi(): Starting calculation
+main(): Sending abort to worker
+worker(): Aborting calculation due to signal from main
+main(): pi = 3.141339
+montecarlopi(): Calculation done
+</code></pre>
+
+<p>Now let&rsquo;s go through the code and see what we had to change to make it
+work. First let&rsquo;s look at <code>montecarlopi()</code>:</p>
+
+<pre><code class="rust">fn montecarlopi(n: uint, sender: Sender&lt;uint&gt;) {
+    println!("montecarlopi(): Starting calculation");
+    let mut m = 0u;
+    for _ in range(0u, n) {
+        let x = random::&lt;f32&gt;();
+        let y = random::&lt;f32&gt;();
+        if (x*x + y*y) &lt; 1.0 {
+            m = m + 1;
+        }
+    }
+    println!("montecarlopi(): Calculation done");
+    sender.send_opt(m);
+}
+</code></pre>
+
+<p>Now that it&rsquo;s in its own task it has to communicate with the
+<code>worker()</code> function and send it the result of the calculation. This is
+as easy as passing in a <code>Sender</code> when calling it. The only interesting
+bit here is that we use <code>send_opt()</code> to send the result to the
+<code>worker()</code> instead of <code>send()</code>. This is because <code>send()</code> aborts the
+program when it can&rsquo;t send the message (i.e. the receiver is gone). We
+need to handle this case as <code>worker()</code> may now return before
+<code>montecarlopi()</code> is done.</p>
+
+<p>So far so good. Now we need to have a look at <code>worker()</code>. It needs to
+change to wire it up correctly with the new <code>montecarlopi()</code>.</p>
+
+<pre><code class="rust">let (sender, receive_from_montecarlo) = channel();
+let initial_sender = sender.clone();
+spawn(proc() {
+    montecarlopi(n, initial_sender);
+});
+let mut timer = Timer::new().unwrap();
+loop {
+    if receive_from_main.try_recv().is_ok() {
+        println!("worker(): Aborting calculation due to signal from main");
+        break;
+    }
+    let montecarlopi_result = receive_from_montecarlo.try_recv();
+    if montecarlopi_result.is_ok() {
+        m = m + montecarlopi_result.unwrap();
+        i = i + 1;
+        let sender_clone = sender.clone();
+        spawn(proc() {
+            montecarlopi(n, sender_clone);
+        });
+    }
+    timer.sleep(50);
+}
+</code></pre>
+
+<p>First we need a new channel to communicate between <code>worker()</code> and
+<code>montecarlopi()</code>. Then we start the first calculation in a new task.
+And after that we enter the endless loop. In it we check for both
+signals from <code>main()</code> (lines 8-11) and from <code>montecarlopi()</code> (lines
+12-20). If there&rsquo;s a message from <code>main()</code> it means we&rsquo;re done and we
+exit the loop. If there&rsquo;s a message from <code>montecarlopi()</code> it means
+that the calculation is done. We then update our best guess of Pi and
+start another calculation.</p>
+
+<p>The concept used here in <code>worker()</code> isn&rsquo;t that complex. What was the
+most difficult for me to get right was the setup of the channel. You
+can see here that we need to pass a copy of sender. This is due to the
+fact that not only does <code>montecarlopi()</code>
+<a href="http://rustbyexample.com/move.html">take ownership</a> of the sender,
+<a href="http://doc.rust-lang.org/tutorial.html#owned-closures">but also <code>proc()</code></a>.
+This is designed so that Rust can safely move the <code>proc()</code> and all the
+data associated with it to a different task. And we of course have to
+have the channel defined outside of the loop so  that all tasks send
+their data back to the same task.</p>
+
+<p>And this is it for this post! In the next part we&rsquo;ll have a look at
+how we can simplify this design. I don&rsquo;t know about you, but it took
+me quite a while to get this design right. I can&rsquo;t imagine using it
+like this in production code.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Rust: Tasks and messages part 1]]></title>
+    <link href="http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1/"/>
+    <updated>2014-07-28T08:11:58+02:00</updated>
+    <id>http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1</id>
+    <content type="html"><![CDATA[<p><em>The code examples of this blog post are available in the Git
+ repository
+ <a href="http://github.com/ujh/tasks-and-messages">tasks-and-messages</a>.</em></p>
+
+<p>In the
+<a href="/2014/07/24/learning-rust-compile-time-polymorphism/">previous learning rust blog post</a>
+I promised to talk about runtime polymorphism next. Instead I&rsquo;m
+starting what is probably going to become a multi part series about
+concurrency. I&rsquo;m doing this as I just happen to need this stuff for
+<a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a>, my main Rust
+project. Iomrascálaí is an AI for the game of Go. Go is a two player game, and
+like Chess, it is played with a time limit during tournaments. So I
+need a way to tell the AI to <em>search for the best move for the next N
+seconds</em> and then return the result immediately.</p>
+
+<!-- more -->
+
+
+<p>Explaining how the AI works is out of the scope of this blog post. The
+only thing you need to know here, is that it essentially is an endless
+loop that does some computation and the longer it can run, the better
+the result will be. Unfortunately each iteration of the loop is rather long, so
+we need to make sure we can return a result <strong>while</strong> we&rsquo;re doing the
+computation of that iteration. This is where concurrency comes in
+handy. What if we could run the iteration in a separate Rust task?
+Then we could just return the result of the previous iteration if
+needed.</p>
+
+<p>But enough theory, let&rsquo;s get going. As we can&rsquo;t just implement a whole
+Go AI for this blog post we need to find a simpler problem that has
+the property that it returns a better value the longer it runs. The
+simplest I could think of is
+<a href="http://mathfaculty.fullerton.edu/mathews/n2003/montecarlopimod.html">calculating the value of Pi using the Monte Carlo method</a>.
+Here&rsquo;s a simple implementation of it:</p>
+
+<pre><code class="rust tasks-and-messages-1.rs">use std::rand::random;
+
+fn montecarlopi(n: uint) -&gt; f32 {
+    let mut m = 0u;
+    for _ in range(0u, n) {
+        let x = random::&lt;f32&gt;();
+        let y = random::&lt;f32&gt;();
+        if (x*x + y*y) &lt; 1.0 {
+            m = m + 1;
+        }
+    }
+    4.0 * m.to_f32().unwrap()/n.to_f32().unwrap()
+}
+
+fn main() {
+    println!("For       1000 random drawings pi = {}", montecarlopi(1000));
+    println!("For      10000 random drawings pi = {}", montecarlopi(10000));
+    println!("For     100000 random drawings pi = {}", montecarlopi(100000));
+    println!("For    1000000 random drawings pi = {}", montecarlopi(1000000));
+    println!("For   10000000 random drawings pi = {}", montecarlopi(10000000));
+}
+</code></pre>
+
+<p>If you run this you&rsquo;ll see that the value of pi calculated by this
+function improves with the number of random drawings:</p>
+
+<pre><code class="plain">uh@croissant:~/Personal/rust$ ./tasks-and-messages-1
+For       1000 random drawings pi = 3.132
+For      10000 random drawings pi = 3.1428
+For     100000 random drawings pi = 3.14416
+For    1000000 random drawings pi = 3.141072
+For   10000000 random drawings pi = 3.141082
+</code></pre>
+
+<p>Next, let&rsquo;s rewrite this program so that it runs for 10 seconds and
+prints out the value of pi. To do this we&rsquo;ll run the simulation in
+chunks of 10 million drawings (around 2.2s on my machine) in a separate
+task and we&rsquo;ll let the main task wait for ten seconds. Once the 10
+seconds are over we&rsquo;ll send a signal to the worker task and ask it to
+return a result.</p>
+
+<p>This is of course a bit contrived as we could just run the simulations
+in sync and regularly check if 10 seconds have passed. But we&rsquo;re
+trying to learn about task here, remember?</p>
+
+<p>Creating a new task in Rust is as easy as calling <code>spawn(proc() { ... })</code> with some
+code. This however only creates a new task, but there&rsquo;s no way to
+communicate with this task. That&rsquo;s where channels come it. A channel
+is a pair of objects. One end can send data (the sender) and the other
+end (the receiver) can receive the data sent by the sender. Now let&rsquo;s
+put it into action:</p>
+
+<pre><code class="rust tasks-and-messages-2.rs">use std::io::Timer;
+use std::rand::random;
+
+fn montecarlopi(n: uint) -&gt; uint {
+    let mut m = 0u;
+    for _ in range(0u, n) {
+        let x = random::&lt;f32&gt;();
+        let y = random::&lt;f32&gt;();
+        if (x*x + y*y) &lt; 1.0 {
+            m = m + 1;
+        }
+    }
+    m
+}
+
+fn worker(receiver: Receiver&lt;uint&gt;, sender: Sender&lt;f32&gt;) {
+    let mut m = 0u;
+    let n = 10_000_000;
+    let mut i = 0;
+    loop {
+        if receiver.try_recv().is_ok() {
+            println!("worker(): Aborting calculation due to signal from main");
+            break;
+        }
+        println!("worker(): Starting calculation");
+        m = m + montecarlopi(n);
+        println!("worker(): Calculation done");
+        i = i + 1;
+    }
+    let val = 4.0 * m.to_f32().unwrap()/(n*i).to_f32().unwrap();
+    sender.send(val);
+}
+
+fn main() {
+    let mut timer = Timer::new().unwrap();
+    let (send_from_worker_to_main, receive_from_worker) = channel();
+    let (send_from_main_to_worker, receive_from_main)   = channel();
+    println!("main(): start calculation and wait 10s");
+    spawn(proc() {
+        worker(receive_from_main, send_from_worker_to_main);
+    });
+    timer.sleep(10_000);
+    println!("main(): Sending abort to worker");
+    send_from_main_to_worker.send(0);
+    println!("main(): pi = {}", receive_from_worker.recv());
+}
+</code></pre>
+
+<p>What we do is as follows: We open two channels. One channel is for the
+<code>worker()</code> to send the value of pi to the <code>main()</code> function
+(<code>send_from_worker_to_main</code> and <code>receive_from_worker</code>). And
+another channel is to send a signal from <code>main()</code> to <code>worker()</code> to
+tell it to stop the calculation and return the result
+(<code>send_from_main_to_worker</code> and <code>receive_from_main</code>). To send
+something along a channel you just call <code>send(VALUE)</code> and to receive
+something you call <code>recv()</code>. It is important to note that <code>recv()</code> is
+blocking and waits for the next value to arrive. To either run a
+computation or abort we need to use the non-blocking version
+(<code>try_recv()</code>) in <code>worker()</code>. <code>try_recv()</code> returns a <code>Result</code> which
+can either be a wrapping of a real value (in this case <code>is_ok()</code>
+returns true) or and error (in which case <code>is_ok()</code> returns false).</p>
+
+<p>Running this produces the following output:</p>
+
+<pre><code class="plain">uh@croissant:~/Personal/rust$ ./tasks-and-messages-2
+main(): start calculation and wait 10s
+worker(): Starting calculation
+worker(): Calculation done
+worker(): Starting calculation
+worker(): Calculation done
+worker(): Starting calculation
+worker(): Calculation done
+worker(): Starting calculation
+worker(): Calculation done
+worker(): Starting calculation
+main(): Sending abort to worker
+worker(): Calculation done
+worker(): Aborting calculation due to signal from main
+main(): pi = 3.141643
+</code></pre>
+
+<p>If you look closely at the result you will notice that we haven&rsquo;t yet
+implemented everything as described. The <code>worker()</code> only returns a
+result to <code>main()</code> once it has finished the current run of
+<code>montecarlopi()</code>. But what I originally described was that it should
+be possible to return a result <strong>while</strong> the the computation is still
+running.</p>
+
+<p>As this blog post has already gotten very long so we&rsquo;ll end it here
+nevertheless. In the next installment, we&rsquo;ll finish implementing the
+program and maybe even start cleaning up the code.</p>
+]]></content>
+  </entry>
+  
+</feed>

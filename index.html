@@ -1,1 +1,636 @@
-My Octopress Page is coming soon &hellip;
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Urban Hafner</title>
+  <meta name="author" content="Urban Hafner">
+
+  
+  <meta name="description" content="A
+recent post on Jim Grey&rsquo;s blog about his job hunt as a QA manager
+made me think about what my ideal test setup for an agile (SCRUM like)
+team &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://bettong.net">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/articles.atom" rel="alternate" title="Urban Hafner" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Urban Hafner</a></h1>
+  
+    <h2>Ruby, Ruby on Rails, JavaScript programmer. Dabbling with Rust and agile methodologies on the side.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/articles.atom" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="bettong.net">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://urbanhafner.com/contact">Contact</a></li>
+  <li><a href="http://urbanhafner.com/resume">CV</a></li>
+  <li><a href="/reading-list">Reading List</a></li>
+  <li><a href="http://urbanhafnerphotography.com/">Photography</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2015/07/03/why-every-agile-team-should-include-a-tester/">Why Every Agile Team Should Include a Tester</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-03T07:26:31+02:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>7:26 am</span></time>
+        
+           | <a href="/2015/07/03/why-every-agile-team-should-include-a-tester/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2015/07/03/why-every-agile-team-should-include-a-tester/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A
+<a href="http://softwaresaltmines.com/2015/06/30/endangered-species-managers-and-directors-of-quality-assurance/">recent post on Jim Grey&rsquo;s blog about his job hunt as a QA manager</a>
+made me think about what my ideal test setup for an agile (SCRUM like)
+team would be.</p>
+
+<p>The thing is, having QA as a completely separate team that tests
+everything once the development team has &ldquo;finished&rdquo; the features and
+bug fixes for the next release is very much out of line with every
+agile methodology. Agile processes are (to me at least) about faster
+feedback and the possibility to change direction quickly. So for
+example, if you were doing SCRUM with one week sprints, do a feature
+freeze every month (you know, management won&rsquo;t let you release each
+week), and only <em>then</em> start testing all the features and bug fixes
+there&rsquo;s quite a lot of overhead. The QA process may take a while as
+everything produced in a month needs to be tested, the developers have
+already moved on to new features and now have to switch <em>back</em> to
+fixing their old code (which is quite a mental overhead) and once
+everything has been tested, fixed, and tested again it&rsquo;s already 2-3
+weeks later.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2015/07/03/why-every-agile-team-should-include-a-tester/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2015/01/18/using-launchd-to-manage-long-running-processes-on-mac-os-x/">Using Launchd to Manage Long Running Processes on Mac OS X</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-01-18T13:23:05+01:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:23 pm</span></time>
+        
+           | <a href="/2015/01/18/using-launchd-to-manage-long-running-processes-on-mac-os-x/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2015/01/18/using-launchd-to-manage-long-running-processes-on-mac-os-x/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I recently had the need to have a long running, user defined process
+on my Mac. At first I thought about using
+<a href="http://mmonit.com/monit/">Monit</a> or
+<a href="https://github.com/mperham/inspeqtor">Inspeqtor</a>, but then
+<a href="https://jeremy.wordpress.com/">Jérémy Lecour</a>
+<a href="https://twitter.com/jlecour/status/556388096246562816">pointed out to me</a>
+that I could just use the built in <a href="http://launchd.info/">launchd</a>.</p>
+
+<p>Lauchd can automatically start processes on startup and it can monitor
+them and restart them should they abort. Adding one yourself is rather
+easy. You create a file in <code>~/Library/LaunchAgents</code> in a certain
+format. Here&rsquo;s one of mine:</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2015/01/18/using-launchd-to-manage-long-running-processes-on-mac-os-x/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2015/01/07/iomrascalai-a-great-way-to-learn-rust-or-about-ai/">Iomrascálaí: A Great Way to Learn Rust or About AI</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-01-07T09:08:35+01:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:08 am</span></time>
+        
+           | <a href="/2015/01/07/iomrascalai-a-great-way-to-learn-rust-or-about-ai/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2015/01/07/iomrascalai-a-great-way-to-learn-rust-or-about-ai/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/rust.png">
+I wrote about <a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a>, my
+personal project to learn <a href="http://www.rust-lang.org/">Rust</a> by writing
+an artificial intelligence for the
+<a href="http://en.wikipedia.org/wiki/Go_(game)">game of Go</a>,
+<a href="/2014/04/29/introducting-iomrascalai/">on here before</a>. Since then
+it&rsquo;s gone rather quiet as I haven&rsquo;t had much time to work on it. We
+bought a house and moved in, I got a new job, my wife started a new
+job, it&rsquo;s winter so the kids get sick all the time &hellip;</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2015/01/07/iomrascalai-a-great-way-to-learn-rust-or-about-ai/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/08/08/two-talks-on-isolating-your-domain-logic-from-rails/">Two Talks on Isolating Your Domain Logic From Rails</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-08T09:29:49+02:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:29 am</span></time>
+        
+           | <a href="/2014/08/08/two-talks-on-isolating-your-domain-logic-from-rails/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2014/08/08/two-talks-on-isolating-your-domain-logic-from-rails/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently one of my co-workers pointed me to this great talk by the
+late Jim Weirich about separating the domain logic of your Ruby on
+Rails app from &ldquo;the plumbing&rdquo;:</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2014/08/08/two-talks-on-isolating-your-domain-logic-from-rails/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/08/01/learning-rust-tasks-and-messages-part-2/">Learning Rust: Tasks and Messages Part 2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-01T08:06:26+02:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>8:06 am</span></time>
+        
+           | <a href="/2014/08/01/learning-rust-tasks-and-messages-part-2/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2014/08/01/learning-rust-tasks-and-messages-part-2/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>The code examples of this blog post are available in the Git
+ repository
+ <a href="http://github.com/ujh/tasks-and-messages">tasks-and-messages</a>.</em></p>
+
+<p>In
+<a href="/2014/07/28/learning-rust-tasks-and-messages-part-1/">part 1 of this series</a>
+we started implementing our Pi calculation using the Monte Carlo
+method. We ended with code that works, but that still doesn&rsquo;t return a
+value after exactly 10 seconds. In this part we&rsquo;ll finish the implementation.</p>
+
+<p>The problem with the previous implementation was that the <code>worker()</code>
+function had to wait for <code>montecarlopi()</code> to return, before it could
+react to the message from <code>main()</code>. The solution to this should now be
+obvious: Let&rsquo;s put the <code>montecarlopi()</code> calculation in a separate
+task. Then <code>worker()</code> can listen to messages from both <code>main()</code> and
+<code>montecarlopi()</code> at the same time.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2014/08/01/learning-rust-tasks-and-messages-part-2/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/07/28/learning-rust-tasks-and-messages-part-1/">Learning Rust: Tasks and Messages Part 1</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-07-28T08:11:58+02:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:11 am</span></time>
+        
+           | <a href="/2014/07/28/learning-rust-tasks-and-messages-part-1/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>The code examples of this blog post are available in the Git
+ repository
+ <a href="http://github.com/ujh/tasks-and-messages">tasks-and-messages</a>.</em></p>
+
+<p>In the
+<a href="/2014/07/24/learning-rust-compile-time-polymorphism/">previous learning rust blog post</a>
+I promised to talk about runtime polymorphism next. Instead I&rsquo;m
+starting what is probably going to become a multi part series about
+concurrency. I&rsquo;m doing this as I just happen to need this stuff for
+<a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a>, my main Rust
+project. Iomrascálaí is an AI for the game of Go. Go is a two player game, and
+like Chess, it is played with a time limit during tournaments. So I
+need a way to tell the AI to <em>search for the best move for the next N
+seconds</em> and then return the result immediately.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2014/07/28/learning-rust-tasks-and-messages-part-1/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/07/24/learning-rust-compile-time-polymorphism/">Learning Rust: Compile Time Polymorphism</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-07-24T08:13:51+02:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:13 am</span></time>
+        
+           | <a href="/2014/07/24/learning-rust-compile-time-polymorphism/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2014/07/24/learning-rust-compile-time-polymorphism/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Coming from Ruby, polymorphism is a big part of the language. After
+all Ruby is a (mostly) object oriented language. Going to a language
+like Rust which is compiled and has an emphasis on being fast, run time
+polymorphism isn&rsquo;t that nice as it slows down the code.  This is
+because there&rsquo;s the overhead of selecting the right implementation of
+a method at runtime and also because there&rsquo;s no way these calls can be
+inlined.</p>
+
+<p>This is where compile time polymorphism comes in. Many times it is
+clear at compile time which concrete type we&rsquo;re going to use in the
+program. We could write it down explicitly, but it is nicer (and more
+flexible) if the compiler can figure it out for us.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2014/07/24/learning-rust-compile-time-polymorphism/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/05/15/my-emacs-configuration/">My Emacs Configuration</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-05-15T09:45:22+02:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:45 am</span></time>
+        
+           | <a href="/2014/05/15/my-emacs-configuration/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2014/05/15/my-emacs-configuration/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As I currently work on a distributed team and we&rsquo;re trying to do more
+and more pair programming I decided that it&rsquo;s time to give Emacs a try
+again. Using <a href="http://tmate.io/">tmate</a> in combination with either
+Emacs or Vim seems to be the way to go due to the lower latency than a
+proper screen sharing solution.</p>
+
+<p>Right now my Emacs configuration is rather basic, but I think it could
+be a good starting point for other people, too. This is why I made it
+available as a <a href="https://github.com/ujh/emacs.d">Github project</a>.</p>
+
+<p>If you have any problems with it let me know and more importantly (at
+least for me personally) if you notice anything that I should do
+differently I&rsquo;d love to hear from you.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/05/09/how-to-test-rust-on-travis-ci/">How to Test Rust on Travis CI</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-05-09T16:07:51+02:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:07 pm</span></time>
+        
+           | <a href="/2014/05/09/how-to-test-rust-on-travis-ci/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2014/05/09/how-to-test-rust-on-travis-ci/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Working with Ruby on Rails in my projects I&rsquo;m used to running continuous integration on <a href="https://travis-ci.org/">Travis CI</a>. As this is free of charge for open source projects projects I wanted to set it up for my Rust project <a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a>, too.</p>
+
+<p>At first I used the setup provided by <a href="http://www.rust-ci.org/help/">Rust CI</a>, but as the project page doesn&rsquo;t seem to be working 100% anymore and because the Debian package they provide of the rust nightly snapshot for some reason strips the Rust version number I decided to use the official nightly snapshots instead.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2014/05/09/how-to-test-rust-on-travis-ci/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/04/29/introducting-iomrascalai/">Introducting Iomrascálaí</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-04-29T08:51:04+02:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:51 am</span></time>
+        
+           | <a href="/2014/04/29/introducting-iomrascalai/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2014/04/29/introducting-iomrascalai/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>or <em>&ldquo;Help me learn Rust by pairing with me&rdquo;</em></p>
+
+<p>After years working in interpreted languages (Ruby, JavaScript) I recently discovered <a href="http://www.rust-lang.org/">Rust</a>. As I sadly don&rsquo;t have the opportunity to use Rust directly in a client project, I decided to come up with a toy project to help me learn the language.</p>
+
+<p>As Rust is supposedly good for programs that actually need raw speed (unlike the web apps I generally write) I decided to come back to one of my old time favourites: an artificial intelligence for the <a href="http://en.wikipedia.org/wiki/Go_(game)">game of Go</a>.</p>
+
+<p>I had already tried writing a few of those in recent years (including helping <a href="https://github.com/ujh/housebot">Jason House with his bot written in D</a>), but every time I had the problem that working alone wasn&rsquo;t very motivating so I never managed to produce a working program.</p>
+
+<p>To combat this I&rsquo;m trying to pair program with people (i.e. <em>you</em>) to keep me going. So if you&rsquo;re interested in either learning Rust with me or writing an AI for the game of Go, <a href="mailto:contact@urbanhafner.com">please get in touch</a>!</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/2014/04/29/introducting-iomrascalai/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/page2">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Pair Programming</h1>
+  <p>
+    I&#8217;m always happy to pair program. Either
+    on <a href="http://github.com/ujh/iomrascalai">Iomrascálaí</a>
+    (written in <a href="http://rust-lang.org">Rust</a>) or on any
+    Ruby, Ruby on Rails, or JavaScript project.
+  </p>
+  <p>
+    Just <a href="mailto:contact@urbanhafner.com">send me an email</a>
+    and we can set something up!
+  </p>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="category-list"><li><a href='/blog/categories/agile'>agile (1)</a></li><li><a href='/blog/categories/ai'>ai (2)</a></li><li><a href='/blog/categories/artificial-intelligence'>artificial intelligence (2)</a></li><li><a href='/blog/categories/baduk'>baduk (2)</a></li><li><a href='/blog/categories/book-club'>book club (5)</a></li><li><a href='/blog/categories/book-review'>book review (2)</a></li><li><a href='/blog/categories/books'>books (1)</a></li><li><a href='/blog/categories/ci'>ci (2)</a></li><li><a href='/blog/categories/compile-time-polymorphism'>compile time polymorphism (1)</a></li><li><a href='/blog/categories/concurrency'>concurrency (2)</a></li><li><a href='/blog/categories/continuous-integration'>continuous integration (2)</a></li><li><a href='/blog/categories/eloquent-ruby'>eloquent ruby (4)</a></li><li><a href='/blog/categories/emacs'>emacs (1)</a></li><li><a href='/blog/categories/go'>go (2)</a></li><li><a href='/blog/categories/goos'>goos (1)</a></li><li><a href='/blog/categories/hack'>hack (1)</a></li><li><a href='/blog/categories/hexagonal-rails'>hexagonal rails (1)</a></li><li><a href='/blog/categories/inspeqtor'>inspeqtor (1)</a></li><li><a href='/blog/categories/iomrascálaí'>iomrascálaí (3)</a></li><li><a href='/blog/categories/jim-weirich'>jim weirich (1)</a></li><li><a href='/blog/categories/launchd'>launchd (1)</a></li><li><a href='/blog/categories/learning-rust'>learning rust (4)</a></li><li><a href='/blog/categories/learning-rust-tasks-and-messages'>learning rust tasks and messages (2)</a></li><li><a href='/blog/categories/lisp'>lisp (1)</a></li><li><a href='/blog/categories/management'>management (1)</a></li><li><a href='/blog/categories/matt-wynne'>matt wynne (1)</a></li><li><a href='/blog/categories/monit'>monit (1)</a></li><li><a href='/blog/categories/pair-programming'>pair programming (2)</a></li><li><a href='/blog/categories/polymorphism'>polymorphism (1)</a></li><li><a href='/blog/categories/process-monitoring'>process monitoring (1)</a></li><li><a href='/blog/categories/programming'>programming (5)</a></li><li><a href='/blog/categories/qa'>qa (1)</a></li><li><a href='/blog/categories/quality-assurance'>quality assurance (1)</a></li><li><a href='/blog/categories/rails'>rails (1)</a></li><li><a href='/blog/categories/review'>review (2)</a></li><li><a href='/blog/categories/ruby'>ruby (6)</a></li><li><a href='/blog/categories/ruby-on-rails'>ruby on rails (2)</a></li><li><a href='/blog/categories/rust'>rust (6)</a></li><li><a href='/blog/categories/sass'>sass (1)</a></li><li><a href='/blog/categories/sass-rails'>sass-rails (1)</a></li><li><a href='/blog/categories/scrum'>scrum (1)</a></li><li><a href='/blog/categories/tasks'>tasks (2)</a></li><li><a href='/blog/categories/testing'>testing (1)</a></li><li><a href='/blog/categories/travis-ci'>travis ci (1)</a></li><li><a href='/blog/categories/weiqi'>weiqi (2)</a></li><li><a href='/blog/categories/workaround'>workaround (1)</a></li></ul>
+</section>
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Urban Hafner -
+  <a href="/imprint">Imprint</a>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bettong-net';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+<script src="//static.getclicky.com/js" type="text/javascript"></script>
+<script type="text/javascript">try{ clicky.init(100625780); }catch(e){}</script>
+<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100625780ns.gif" /></p></noscript>
+
+
+</body>
+</html>

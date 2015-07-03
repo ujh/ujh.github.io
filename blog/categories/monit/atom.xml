@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: monit | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/monit/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using launchd to manage long running processes on Mac OS X]]></title>
+    <link href="http://bettong.net/2015/01/18/using-launchd-to-manage-long-running-processes-on-mac-os-x/"/>
+    <updated>2015-01-18T13:23:05+01:00</updated>
+    <id>http://bettong.net/2015/01/18/using-launchd-to-manage-long-running-processes-on-mac-os-x</id>
+    <content type="html"><![CDATA[<p>I recently had the need to have a long running, user defined process
+on my Mac. At first I thought about using
+<a href="http://mmonit.com/monit/">Monit</a> or
+<a href="https://github.com/mperham/inspeqtor">Inspeqtor</a>, but then
+<a href="https://jeremy.wordpress.com/">Jérémy Lecour</a>
+<a href="https://twitter.com/jlecour/status/556388096246562816">pointed out to me</a>
+that I could just use the built in <a href="http://launchd.info/">launchd</a>.</p>
+
+<p>Lauchd can automatically start processes on startup and it can monitor
+them and restart them should they abort. Adding one yourself is rather
+easy. You create a file in <code>~/Library/LaunchAgents</code> in a certain
+format. Here&rsquo;s one of mine:</p>
+
+<!-- more -->
+
+
+<pre><code class="xml gnugo13x13.plist">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+  &lt;dict&gt;
+    &lt;key&gt;Label&lt;/key&gt;
+    &lt;string&gt;gnugo13x13&lt;/string&gt;
+    &lt;key&gt;ProgramArguments&lt;/key&gt;
+    &lt;array&gt;
+      &lt;string&gt;/Users/uh/bin/cgosGnuGo13x13&lt;/string&gt;
+    &lt;/array&gt;
+    &lt;key&gt;KeepAlive&lt;/key&gt;
+    &lt;true/&gt;
+    &lt;key&gt;RunAtLoad&lt;/key&gt;
+    &lt;true/&gt;
+    &lt;key&gt;StandardOutPath&lt;/key&gt;
+    &lt;string&gt;/Users/uh/Library/Logs/CGOS/gnugo13x13.stdout&lt;/string&gt;
+    &lt;key&gt;StandardErrorPath&lt;/key&gt;
+    &lt;string&gt;/Users/uh/Library/Logs/CGOS/gnugo13x13.stderr&lt;/string&gt;
+  &lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+
+<p>Then you notify launchd of your new file by running <code>lauchnctl load
+~/Library/LaunchAgents/gnugo13x13.plist</code> and you should see a new line
+in your <code>system.log</code> (accessible through
+<a href="http://en.wikipedia.org/wiki/Console_%28OS_X%29">Console.app</a>). If
+all goes well then that&rsquo;s all you will see there, but if starting the
+log didn&rsquo;t work you will see that mentioned in the <code>system.log</code>, too.</p>
+
+<p>Now let&rsquo;s go through the interesting parts of that file. As you may
+have already guessed we essentially setup key value pairs here. An XML
+element <code>key</code> defines the key name and the next element defines the
+value.</p>
+
+<p><code>Label</code> is the name of your job. It needs to be unique and it
+is used in the <code>system.log</code> whenever there is something happening
+(stop, start, crash, &hellip;) with your job.</p>
+
+<p><code>ProgramArguments</code> is an array of strings that make up your system
+call. The first one is the path to the executable you want to run, and
+the others are command line arguments. If you don&rsquo;t have any command
+line arguments you can just use <code>Program</code>. So, I probably should have
+used <code>Program</code> in my example file, but that&rsquo;s the actual file from my
+system and it works, so why change it, right? ;)</p>
+
+<p><code>KeepAlive</code> is optional and means that launchd will restart your job
+should it terminate. <code>RunAtLoad</code> is necessary to automatically start
+your job when you turn on your computer.</p>
+
+<p>The last two, <code>StandardOutPath</code> and <code>StandardErrorPath</code> should be self
+explanatory. They are paths to files that will be used to log the
+stdout and stderr of your job. There&rsquo;s just one thing you need to keep
+in mind. The folder where these files reside needs to exist before you
+start the job. It will be created by launchd for you, but it will be
+owned by root and therefore the job won&rsquo;t be able to write in there
+and the job will fail.</p>
+
+<p>Detailed information on everything that you can do with launchd can be
+found at <a href="http://launchd.info/">launchd.info</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: scrum | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/scrum/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Why every agile team should include a tester]]></title>
+    <link href="http://bettong.net/2015/07/03/why-every-agile-team-should-include-a-tester/"/>
+    <updated>2015-07-03T07:26:31+02:00</updated>
+    <id>http://bettong.net/2015/07/03/why-every-agile-team-should-include-a-tester</id>
+    <content type="html"><![CDATA[<p>A
+<a href="http://softwaresaltmines.com/2015/06/30/endangered-species-managers-and-directors-of-quality-assurance/">recent post on Jim Grey&rsquo;s blog about his job hunt as a QA manager</a>
+made me think about what my ideal test setup for an agile (SCRUM like)
+team would be.</p>
+
+<p>The thing is, having QA as a completely separate team that tests
+everything once the development team has &ldquo;finished&rdquo; the features and
+bug fixes for the next release is very much out of line with every
+agile methodology. Agile processes are (to me at least) about faster
+feedback and the possibility to change direction quickly. So for
+example, if you were doing SCRUM with one week sprints, do a feature
+freeze every month (you know, management won&rsquo;t let you release each
+week), and only <em>then</em> start testing all the features and bug fixes
+there&rsquo;s quite a lot of overhead. The QA process may take a while as
+everything produced in a month needs to be tested, the developers have
+already moved on to new features and now have to switch <em>back</em> to
+fixing their old code (which is quite a mental overhead) and once
+everything has been tested, fixed, and tested again it&rsquo;s already 2-3
+weeks later.</p>
+
+<!-- more -->
+
+
+<p>A better approach I found is to have the testing being done right
+after the feature or bug fix is finished. Assuming you have automated
+tests and an automated deployment process (I&rsquo;m assuming that you&rsquo;re
+developing a web app) you can just have your continuous integration
+server run the tests and once they pass deploy the latest version of
+the code to your staging server and notify the tester. That way the
+tester can do the checking right away and send feedback within hours
+or even minutes. After such a short amount of time the developer in
+charge probably still knows enough about the code so that he can
+quickly fix the issues the tester found.</p>
+
+<p>Obviously a final round of QA before getting a release out the door is
+still necessary, but as it can be assumed that all features and bug
+fixes are correctly implemented this can now be much shorter and needs
+to be less thorough. That way the release can be shipping much faster,
+any you know maybe you can even ship more often than once a month.</p>
+]]></content>
+  </entry>
+  
+</feed>

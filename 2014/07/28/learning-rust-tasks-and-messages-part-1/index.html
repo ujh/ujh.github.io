@@ -1,0 +1,514 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Learning Rust: Tasks and Messages Part 1 - Urban Hafner</title>
+  <meta name="author" content="Urban Hafner">
+
+  
+  <meta name="description" content="The code examples of this blog post are available in the Git repository tasks-and-messages. In the
+previous learning rust blog post
+I promised to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/articles.atom" rel="alternate" title="Urban Hafner" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Urban Hafner</a></h1>
+  
+    <h2>Ruby, Ruby on Rails, JavaScript programmer. Dabbling with Rust and agile methodologies on the side.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/articles.atom" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="bettong.net">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://urbanhafner.com/contact">Contact</a></li>
+  <li><a href="http://urbanhafner.com/resume">CV</a></li>
+  <li><a href="/reading-list">Reading List</a></li>
+  <li><a href="http://urbanhafnerphotography.com/">Photography</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Learning Rust: Tasks and Messages Part 1</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-07-28T08:11:58+02:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:11 am</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://bettong.net">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><em>The code examples of this blog post are available in the Git
+ repository
+ <a href="http://github.com/ujh/tasks-and-messages">tasks-and-messages</a>.</em></p>
+
+<p>In the
+<a href="/2014/07/24/learning-rust-compile-time-polymorphism/">previous learning rust blog post</a>
+I promised to talk about runtime polymorphism next. Instead I&rsquo;m
+starting what is probably going to become a multi part series about
+concurrency. I&rsquo;m doing this as I just happen to need this stuff for
+<a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a>, my main Rust
+project. Iomrascálaí is an AI for the game of Go. Go is a two player game, and
+like Chess, it is played with a time limit during tournaments. So I
+need a way to tell the AI to <em>search for the best move for the next N
+seconds</em> and then return the result immediately.</p>
+
+<!-- more -->
+
+
+<p>Explaining how the AI works is out of the scope of this blog post. The
+only thing you need to know here, is that it essentially is an endless
+loop that does some computation and the longer it can run, the better
+the result will be. Unfortunately each iteration of the loop is rather long, so
+we need to make sure we can return a result <strong>while</strong> we&rsquo;re doing the
+computation of that iteration. This is where concurrency comes in
+handy. What if we could run the iteration in a separate Rust task?
+Then we could just return the result of the previous iteration if
+needed.</p>
+
+<p>But enough theory, let&rsquo;s get going. As we can&rsquo;t just implement a whole
+Go AI for this blog post we need to find a simpler problem that has
+the property that it returns a better value the longer it runs. The
+simplest I could think of is
+<a href="http://mathfaculty.fullerton.edu/mathews/n2003/montecarlopimod.html">calculating the value of Pi using the Monte Carlo method</a>.
+Here&rsquo;s a simple implementation of it:</p>
+
+<figure class='code'><figcaption><span>tasks-and-messages-1.rs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">rand</span><span class="o">::</span><span class="n">random</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="o">:</span> <span class="k">uint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">f32</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">m</span> <span class="o">=</span> <span class="m">0</span><span class="k">u</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">_</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="m">0</span><span class="k">u</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">y</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">1.0</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="m">4.0</span> <span class="o">*</span> <span class="n">m</span><span class="p">.</span><span class="n">to_f32</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span><span class="o">/</span><span class="n">n</span><span class="p">.</span><span class="n">to_f32</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;For       1000 random drawings pi = {}&quot;</span><span class="p">,</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="m">1000</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;For      10000 random drawings pi = {}&quot;</span><span class="p">,</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="m">10000</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;For     100000 random drawings pi = {}&quot;</span><span class="p">,</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="m">100000</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;For    1000000 random drawings pi = {}&quot;</span><span class="p">,</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="m">1000000</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;For   10000000 random drawings pi = {}&quot;</span><span class="p">,</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="m">10000000</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you run this you&rsquo;ll see that the value of pi calculated by this
+function improves with the number of random drawings:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>uh@croissant:~/Personal/rust$ ./tasks-and-messages-1
+</span><span class='line'>For       1000 random drawings pi = 3.132
+</span><span class='line'>For      10000 random drawings pi = 3.1428
+</span><span class='line'>For     100000 random drawings pi = 3.14416
+</span><span class='line'>For    1000000 random drawings pi = 3.141072
+</span><span class='line'>For   10000000 random drawings pi = 3.141082</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, let&rsquo;s rewrite this program so that it runs for 10 seconds and
+prints out the value of pi. To do this we&rsquo;ll run the simulation in
+chunks of 10 million drawings (around 2.2s on my machine) in a separate
+task and we&rsquo;ll let the main task wait for ten seconds. Once the 10
+seconds are over we&rsquo;ll send a signal to the worker task and ask it to
+return a result.</p>
+
+<p>This is of course a bit contrived as we could just run the simulations
+in sync and regularly check if 10 seconds have passed. But we&rsquo;re
+trying to learn about task here, remember?</p>
+
+<p>Creating a new task in Rust is as easy as calling <code>spawn(proc() { ... })</code> with some
+code. This however only creates a new task, but there&rsquo;s no way to
+communicate with this task. That&rsquo;s where channels come it. A channel
+is a pair of objects. One end can send data (the sender) and the other
+end (the receiver) can receive the data sent by the sender. Now let&rsquo;s
+put it into action:</p>
+
+<figure class='code'><figcaption><span>tasks-and-messages-2.rs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">io</span><span class="o">::</span><span class="n">Timer</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="n">std</span><span class="o">::</span><span class="n">rand</span><span class="o">::</span><span class="n">random</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="o">:</span> <span class="k">uint</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">uint</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">m</span> <span class="o">=</span> <span class="m">0</span><span class="k">u</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">_</span> <span class="n">in</span> <span class="n">range</span><span class="p">(</span><span class="m">0</span><span class="k">u</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">let</span> <span class="n">y</span> <span class="o">=</span> <span class="n">random</span><span class="o">::&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="m">1.0</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">m</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">worker</span><span class="p">(</span><span class="n">receiver</span><span class="o">:</span> <span class="n">Receiver</span><span class="o">&lt;</span><span class="k">uint</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">sender</span><span class="o">:</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="k">f32</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">m</span> <span class="o">=</span> <span class="m">0</span><span class="k">u</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">n</span> <span class="o">=</span> <span class="m">10_000_000</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">i</span> <span class="o">=</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">loop</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="n">receiver</span><span class="p">.</span><span class="n">try_recv</span><span class="p">().</span><span class="n">is_ok</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;worker(): Aborting calculation due to signal from main&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;worker(): Starting calculation&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="n">montecarlopi</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;worker(): Calculation done&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="m">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">let</span> <span class="n">val</span> <span class="o">=</span> <span class="m">4.0</span> <span class="o">*</span> <span class="n">m</span><span class="p">.</span><span class="n">to_f32</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">i</span><span class="p">).</span><span class="n">to_f32</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">sender</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fn</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">let</span> <span class="k">mut</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="o">::</span><span class="n">new</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">let</span> <span class="p">(</span><span class="n">send_from_worker_to_main</span><span class="p">,</span> <span class="n">receive_from_worker</span><span class="p">)</span> <span class="o">=</span> <span class="n">channel</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">let</span> <span class="p">(</span><span class="n">send_from_main_to_worker</span><span class="p">,</span> <span class="n">receive_from_main</span><span class="p">)</span>   <span class="o">=</span> <span class="n">channel</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;main(): start calculation and wait 10s&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">spawn</span><span class="p">(</span><span class="n">proc</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">worker</span><span class="p">(</span><span class="n">receive_from_main</span><span class="p">,</span> <span class="n">send_from_worker_to_main</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="n">timer</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">10_000</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;main(): Sending abort to worker&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">send_from_main_to_worker</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;main(): pi = {}&quot;</span><span class="p">,</span> <span class="n">receive_from_worker</span><span class="p">.</span><span class="n">recv</span><span class="p">());</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What we do is as follows: We open two channels. One channel is for the
+<code>worker()</code> to send the value of pi to the <code>main()</code> function
+(<code>send_from_worker_to_main</code> and <code>receive_from_worker</code>). And
+another channel is to send a signal from <code>main()</code> to <code>worker()</code> to
+tell it to stop the calculation and return the result
+(<code>send_from_main_to_worker</code> and <code>receive_from_main</code>). To send
+something along a channel you just call <code>send(VALUE)</code> and to receive
+something you call <code>recv()</code>. It is important to note that <code>recv()</code> is
+blocking and waits for the next value to arrive. To either run a
+computation or abort we need to use the non-blocking version
+(<code>try_recv()</code>) in <code>worker()</code>. <code>try_recv()</code> returns a <code>Result</code> which
+can either be a wrapping of a real value (in this case <code>is_ok()</code>
+returns true) or and error (in which case <code>is_ok()</code> returns false).</p>
+
+<p>Running this produces the following output:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>uh@croissant:~/Personal/rust$ ./tasks-and-messages-2
+</span><span class='line'>main(): start calculation and wait 10s
+</span><span class='line'>worker(): Starting calculation
+</span><span class='line'>worker(): Calculation done
+</span><span class='line'>worker(): Starting calculation
+</span><span class='line'>worker(): Calculation done
+</span><span class='line'>worker(): Starting calculation
+</span><span class='line'>worker(): Calculation done
+</span><span class='line'>worker(): Starting calculation
+</span><span class='line'>worker(): Calculation done
+</span><span class='line'>worker(): Starting calculation
+</span><span class='line'>main(): Sending abort to worker
+</span><span class='line'>worker(): Calculation done
+</span><span class='line'>worker(): Aborting calculation due to signal from main
+</span><span class='line'>main(): pi = 3.141643</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you look closely at the result you will notice that we haven&rsquo;t yet
+implemented everything as described. The <code>worker()</code> only returns a
+result to <code>main()</code> once it has finished the current run of
+<code>montecarlopi()</code>. But what I originally described was that it should
+be possible to return a result <strong>while</strong> the the computation is still
+running.</p>
+
+<p>As this blog post has already gotten very long so we&rsquo;ll end it here
+nevertheless. In the next installment, we&rsquo;ll finish implementing the
+program and maybe even start cleaning up the code.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Urban Hafner</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-07-28T08:11:58+02:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:11 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/concurrency/'>concurrency</a>, <a class='category' href='/blog/categories/learning-rust/'>learning rust</a>, <a class='category' href='/blog/categories/learning-rust-tasks-and-messages/'>learning rust tasks and messages</a>, <a class='category' href='/blog/categories/programming/'>programming</a>, <a class='category' href='/blog/categories/rust/'>rust</a>, <a class='category' href='/blog/categories/tasks/'>tasks</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1/" data-via="" data-counturl="http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2014/07/24/learning-rust-compile-time-polymorphism/" title="Previous Post: Learning Rust: Compile time polymorphism">&laquo; Learning Rust: Compile time polymorphism</a>
+      
+      
+        <a class="basic-alignment right" href="/2014/08/01/learning-rust-tasks-and-messages-part-2/" title="Next Post: Learning Rust: Tasks and Messages Part 2">Learning Rust: Tasks and Messages Part 2 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Pair Programming</h1>
+  <p>
+    I&#8217;m always happy to pair program. Either
+    on <a href="http://github.com/ujh/iomrascalai">Iomrascálaí</a>
+    (written in <a href="http://rust-lang.org">Rust</a>) or on any
+    Ruby, Ruby on Rails, or JavaScript project.
+  </p>
+  <p>
+    Just <a href="mailto:contact@urbanhafner.com">send me an email</a>
+    and we can set something up!
+  </p>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="category-list"><li><a href='/blog/categories/agile'>agile (1)</a></li><li><a href='/blog/categories/ai'>ai (2)</a></li><li><a href='/blog/categories/artificial-intelligence'>artificial intelligence (2)</a></li><li><a href='/blog/categories/baduk'>baduk (2)</a></li><li><a href='/blog/categories/book-club'>book club (5)</a></li><li><a href='/blog/categories/book-review'>book review (2)</a></li><li><a href='/blog/categories/books'>books (1)</a></li><li><a href='/blog/categories/ci'>ci (2)</a></li><li><a href='/blog/categories/compile-time-polymorphism'>compile time polymorphism (1)</a></li><li><a href='/blog/categories/concurrency'>concurrency (2)</a></li><li><a href='/blog/categories/continuous-integration'>continuous integration (2)</a></li><li><a href='/blog/categories/eloquent-ruby'>eloquent ruby (4)</a></li><li><a href='/blog/categories/emacs'>emacs (1)</a></li><li><a href='/blog/categories/go'>go (2)</a></li><li><a href='/blog/categories/goos'>goos (1)</a></li><li><a href='/blog/categories/hack'>hack (1)</a></li><li><a href='/blog/categories/hexagonal-rails'>hexagonal rails (1)</a></li><li><a href='/blog/categories/inspeqtor'>inspeqtor (1)</a></li><li><a href='/blog/categories/iomrascálaí'>iomrascálaí (3)</a></li><li><a href='/blog/categories/jim-weirich'>jim weirich (1)</a></li><li><a href='/blog/categories/launchd'>launchd (1)</a></li><li><a href='/blog/categories/learning-rust'>learning rust (4)</a></li><li><a href='/blog/categories/learning-rust-tasks-and-messages'>learning rust tasks and messages (2)</a></li><li><a href='/blog/categories/lisp'>lisp (1)</a></li><li><a href='/blog/categories/management'>management (1)</a></li><li><a href='/blog/categories/matt-wynne'>matt wynne (1)</a></li><li><a href='/blog/categories/monit'>monit (1)</a></li><li><a href='/blog/categories/pair-programming'>pair programming (2)</a></li><li><a href='/blog/categories/polymorphism'>polymorphism (1)</a></li><li><a href='/blog/categories/process-monitoring'>process monitoring (1)</a></li><li><a href='/blog/categories/programming'>programming (5)</a></li><li><a href='/blog/categories/qa'>qa (1)</a></li><li><a href='/blog/categories/quality-assurance'>quality assurance (1)</a></li><li><a href='/blog/categories/rails'>rails (1)</a></li><li><a href='/blog/categories/review'>review (2)</a></li><li><a href='/blog/categories/ruby'>ruby (6)</a></li><li><a href='/blog/categories/ruby-on-rails'>ruby on rails (2)</a></li><li><a href='/blog/categories/rust'>rust (6)</a></li><li><a href='/blog/categories/sass'>sass (1)</a></li><li><a href='/blog/categories/sass-rails'>sass-rails (1)</a></li><li><a href='/blog/categories/scrum'>scrum (1)</a></li><li><a href='/blog/categories/tasks'>tasks (2)</a></li><li><a href='/blog/categories/testing'>testing (1)</a></li><li><a href='/blog/categories/travis-ci'>travis ci (1)</a></li><li><a href='/blog/categories/weiqi'>weiqi (2)</a></li><li><a href='/blog/categories/workaround'>workaround (1)</a></li></ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Urban Hafner -
+  <a href="/imprint">Imprint</a>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bettong-net';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1/';
+        var disqus_url = 'http://bettong.net/2014/07/28/learning-rust-tasks-and-messages-part-1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+<script src="//static.getclicky.com/js" type="text/javascript"></script>
+<script type="text/javascript">try{ clicky.init(100625780); }catch(e){}</script>
+<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100625780ns.gif" /></p></noscript>
+
+
+</body>
+</html>

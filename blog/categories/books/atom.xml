@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: books | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/books/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2015-07-03T08:22:25+02:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My Reading List]]></title>
+    <link href="http://bettong.net/2012/06/28/my-reading-list/"/>
+    <updated>2012-06-28T12:50:00+02:00</updated>
+    <id>http://bettong.net/2012/06/28/my-reading-list</id>
+    <content type="html"><![CDATA[<p>I always found it interesting to see what other people in our field are reading. In that vain I thought I&rsquo;d share my <a href="/reading-list">reading list</a>, too.</p>
+
+<p>At this point it&rsquo;s very much a work in progress and I&rsquo;ll fill in more details as time goes on. Feel free to suggest new titles in the comments of this blog post or on the reading list page itself.</p>
+]]></content>
+  </entry>
+  
+</feed>
