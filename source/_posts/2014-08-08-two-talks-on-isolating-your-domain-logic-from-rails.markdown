@@ -17,6 +17,8 @@ Recently one of my co-workers pointed me to this great talk by the
 late Jim Weirich about separating the domain logic of your Ruby on
 Rails app from "the plumbing":
 
+<!-- more -->
+
 <iframe width="640" height="360"
 src="//www.youtube-nocookie.com/embed/tg5RFeSfBM4?rel=0"
 frameborder="0" allowfullscreen></iframe>

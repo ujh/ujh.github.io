@@ -10,6 +10,8 @@ Working with Ruby on Rails in my projects I'm used to running continuous integra
 
 At first I used the setup provided by [Rust CI](http://www.rust-ci.org/help/), but as the project page doesn't seem to be working 100% anymore and because the Debian package they provide of the rust nightly snapshot for some reason strips the Rust version number I decided to use the official nightly snapshots instead.
 
+<!-- more -->
+
 It was actually quite easy to do and if you want to test your Rust project on Travis CI yourself just drop that file into your project folder and adjust the last line to run your tests!
 
 ``` yaml .travis.yml

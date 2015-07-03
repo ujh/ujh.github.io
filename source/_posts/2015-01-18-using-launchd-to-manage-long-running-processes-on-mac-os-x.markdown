@@ -23,6 +23,8 @@ them and restart them should they abort. Adding one yourself is rather
 easy. You create a file in `~/Library/LaunchAgents` in a certain
 format. Here's one of mine:
 
+<!-- more -->
+
 ``` xml gnugo13x13.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

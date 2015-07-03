@@ -34,6 +34,8 @@ fixing their old code (which is quite a mental overhead) and once
 everything has been tested, fixed, and tested again it's already 2-3
 weeks later.
 
+<!-- more -->
+
 A better approach I found is to have the testing being done right
 after the feature or bug fix is finished. Assuming you have automated
 tests and an automated deployment process (I'm assuming that you're

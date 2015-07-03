@@ -25,6 +25,8 @@ it's gone rather quiet as I haven't had much time to work on it. We
 bought a house and moved in, I got a new job, my wife started a new
 job, it's winter so the kids get sick all the time ...
 
+<!-- more -->
+
 Now that things have *slightly* settled down I'm ready to continue
 with this project. And this is why I'm writing this blog post. If
 there's anyone out there who either wants to learn Rust or learn about

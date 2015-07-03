@@ -29,6 +29,8 @@ obvious: Let's put the `montecarlopi()` calculation in a separate
 task. Then `worker()` can listen to messages from both `main()` and
 `montecarlopi()` at the same time.
 
+<!-- more -->
+
 Here's the code:
 
 ``` rust tasks-and-messages-3.rs

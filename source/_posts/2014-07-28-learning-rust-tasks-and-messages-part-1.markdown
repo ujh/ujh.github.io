@@ -27,6 +27,8 @@ like Chess, it is played with a time limit during tournaments. So I
 need a way to tell the AI to *search for the best move for the next N
 seconds* and then return the result immediately.
 
+<!-- more -->
+
 Explaining how the AI works is out of the scope of this blog post. The
 only thing you need to know here, is that it essentially is an endless
 loop that does some computation and the longer it can run, the better

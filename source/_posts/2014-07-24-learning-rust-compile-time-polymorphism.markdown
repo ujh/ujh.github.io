@@ -24,6 +24,8 @@ clear at compile time which concrete type we're going to use in the
 program. We could write it down explicitly, but it is nicer (and more
 flexible) if the compiler can figure it out for us.
 
+<!-- more -->
+
 Below is a small example of how this works. `Implementer1` and
 `Implementer2` are two structs that both implement the trait
 `TheTrait`. The third struct, `Container`, should be setup in such a
