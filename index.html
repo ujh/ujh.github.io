@@ -9,10 +9,7 @@
   <meta name="author" content="Urban Hafner">
 
   
-  <meta name="description" content="A
-recent post on Jim Grey&rsquo;s blog about his job hunt as a QA manager
-made me think about what my ideal test setup for an agile (SCRUM like)
-team &hellip;">
+  <meta name="description" content="It&rsquo;s been a while since I wrote about Iomrascálaí the engine for the game of Go I&rsquo;m writing in Rust. I will try to do it a bit more often &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,6 +68,72 @@ team &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2015/12/07/iomrascalai-0-dot-3-0-released/">Iomrascálaí 0.3.0 Released</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-07T17:29:23+01:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:29 pm</span></time>
+        
+           | <a href="/2015/12/07/iomrascalai-0-dot-3-0-released/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2015/12/07/iomrascalai-0-dot-3-0-released/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It&rsquo;s been a while since I wrote about <a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a> the engine for the <a href="https://en.wikipedia.org/wiki/Go_(game)">game of Go</a> I&rsquo;m writing in Rust. I will try to do it a bit more often from now on as I&rsquo;ve finally found the motivation to work on it again.</p>
+
+<p>So today I&rsquo;d like to announce <a href="https://github.com/ujh/iomrascalai/releases/tag/0.3.0">version 0.3.0</a>! It&rsquo;s been in the works since September and included two big improvements:</p>
+
+<ol>
+<li>We&rsquo;re now using the RAVE heuristic in selecting which tree leaf to investigate next.</li>
+<li>We use a set of 3x3 patterns to guide both the tree exploration and the move selection in the playouts.</li>
+</ol>
+
+
+<p>These two changes together lead to a strength increase when playing against GnuGo of <em>~20% on 9x9</em> and <em>~25% on 13x13</em>! See the <a href="https://github.com/ujh/iomrascalai/releases/tag/0.3.0">release notes</a> and the <a href="https://github.com/ujh/iomrascalai/blob/master/CHANGELOG.md">change log</a> for detailed listings of what actually changed between 0.2.4 and 0.3.0.</p>
+
+<h2>The plan for 0.4</h2>
+
+<p>The main goal for 0.4 is to finally get close to equal strength with GnuGo on 19x19. A bit task but where&rsquo;s the fun in picking easy tasks? ;) To achieve this goal I&rsquo;m planning to work on the following issues:</p>
+
+<ol>
+<li><a href="https://github.com/ujh/iomrascalai/issues/201">Speed up the playouts</a>! Just 100 playouts per second on 19x19 is really slow and it&rsquo;s no wonder that the engine has no chance against GnuGo.</li>
+<li><a href="https://github.com/ujh/iomrascalai/issues/210">Add criticality to tree selection algorithm</a>. Apparently both Pachi and CrazyStone have had success with adding this as an additional term to the formula.</li>
+<li><a href="https://github.com/ujh/iomrascalai/issues/200">Tune the parameters using CLOP</a>. I&rsquo;ve moved the parameters into a config file so at least technically it&rsquo;s now easy to run experiments and optimize the parameters.</li>
+<li><a href="https://github.com/ujh/iomrascalai/issues/209">Continue searching when the results are unclear</a>. Various engines have had success with searching longer than the allocated time when the best move isn&rsquo;t clear (i.e. close to the second best move).</li>
+<li><a href="https://github.com/ujh/iomrascalai/issues/231">Use larger patterns</a>. Until now the engine only uses 3x3 patterns. It seems worthwhile to investigate if using larger patterns can help.</li>
+<li><a href="https://github.com/ujh/iomrascalai/issues/234">Use a DCNN to guide the search</a>. There&rsquo;s a pre-trained neural network that&rsquo;s in use by several engines to guide the search and it has improved the results significantly for them. It may be a good idea to investigate this, too.</li>
+</ol>
+
+
+<h2>Challenges</h2>
+
+<ol>
+<li>The main challenge is computation power! Running 500 games for 9x9 and 13x13 each already takes a few days. And adding 19x19 to the mix will mean that changes will take a long time to benchmark.</li>
+<li>The libraries to efficiently run the DCNN code (like Caffe of Tensorflow) have quite a lot of dependencies and it&rsquo;s not clear how easily they can be integrated with Rust. It will at least make compiling the bot more difficult for newcomers.</li>
+</ol>
+
+
+<p>Like I said, quite a challenging plan! But I&rsquo;m sure it will be a lot of fun. I will leave you with a link to talk by <a href="https://pragtob.wordpress.com/2015/11/21/slides-beating-go-thanks-to-the-power-of-randomness-rubyconf-2015/">Tobias Pfeiffer about computer Go</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -492,51 +555,6 @@ differently I&rsquo;d love to hear from you.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2014/04/29/introducting-iomrascalai/">Introducting Iomrascálaí</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-04-29T08:51:04+02:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:51 am</span></time>
-        
-           | <a href="/2014/04/29/introducting-iomrascalai/#disqus_thread"
-             data-disqus-identifier="http://bettong.net/2014/04/29/introducting-iomrascalai/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>or <em>&ldquo;Help me learn Rust by pairing with me&rdquo;</em></p>
-
-<p>After years working in interpreted languages (Ruby, JavaScript) I recently discovered <a href="http://www.rust-lang.org/">Rust</a>. As I sadly don&rsquo;t have the opportunity to use Rust directly in a client project, I decided to come up with a toy project to help me learn the language.</p>
-
-<p>As Rust is supposedly good for programs that actually need raw speed (unlike the web apps I generally write) I decided to come back to one of my old time favourites: an artificial intelligence for the <a href="http://en.wikipedia.org/wiki/Go_(game)">game of Go</a>.</p>
-
-<p>I had already tried writing a few of those in recent years (including helping <a href="https://github.com/ujh/housebot">Jason House with his bot written in D</a>), but every time I had the problem that working alone wasn&rsquo;t very motivating so I never managed to produce a working program.</p>
-
-<p>To combat this I&rsquo;m trying to pair program with people (i.e. <em>you</em>) to keep me going. So if you&rsquo;re interested in either learning Rust with me or writing an AI for the game of Go, <a href="mailto:contact@urbanhafner.com">please get in touch</a>!</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/2014/04/29/introducting-iomrascalai/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page2">&larr; Older</a>
@@ -562,7 +580,7 @@ differently I&rsquo;d love to hear from you.</p>
 </section>
 <section>
   <h1>Categories</h1>
-  <ul id="category-list"><li><a href='/blog/categories/agile'>agile (1)</a></li><li><a href='/blog/categories/ai'>ai (2)</a></li><li><a href='/blog/categories/artificial-intelligence'>artificial intelligence (2)</a></li><li><a href='/blog/categories/baduk'>baduk (2)</a></li><li><a href='/blog/categories/book-club'>book club (5)</a></li><li><a href='/blog/categories/book-review'>book review (2)</a></li><li><a href='/blog/categories/books'>books (1)</a></li><li><a href='/blog/categories/ci'>ci (2)</a></li><li><a href='/blog/categories/compile-time-polymorphism'>compile time polymorphism (1)</a></li><li><a href='/blog/categories/concurrency'>concurrency (2)</a></li><li><a href='/blog/categories/continuous-integration'>continuous integration (2)</a></li><li><a href='/blog/categories/eloquent-ruby'>eloquent ruby (4)</a></li><li><a href='/blog/categories/emacs'>emacs (1)</a></li><li><a href='/blog/categories/go'>go (2)</a></li><li><a href='/blog/categories/goos'>goos (1)</a></li><li><a href='/blog/categories/hack'>hack (1)</a></li><li><a href='/blog/categories/hexagonal-rails'>hexagonal rails (1)</a></li><li><a href='/blog/categories/inspeqtor'>inspeqtor (1)</a></li><li><a href='/blog/categories/iomrascálaí'>iomrascálaí (3)</a></li><li><a href='/blog/categories/jim-weirich'>jim weirich (1)</a></li><li><a href='/blog/categories/launchd'>launchd (1)</a></li><li><a href='/blog/categories/learning-rust'>learning rust (4)</a></li><li><a href='/blog/categories/learning-rust-tasks-and-messages'>learning rust tasks and messages (2)</a></li><li><a href='/blog/categories/lisp'>lisp (1)</a></li><li><a href='/blog/categories/management'>management (1)</a></li><li><a href='/blog/categories/matt-wynne'>matt wynne (1)</a></li><li><a href='/blog/categories/monit'>monit (1)</a></li><li><a href='/blog/categories/pair-programming'>pair programming (2)</a></li><li><a href='/blog/categories/polymorphism'>polymorphism (1)</a></li><li><a href='/blog/categories/process-monitoring'>process monitoring (1)</a></li><li><a href='/blog/categories/programming'>programming (5)</a></li><li><a href='/blog/categories/qa'>qa (1)</a></li><li><a href='/blog/categories/quality-assurance'>quality assurance (1)</a></li><li><a href='/blog/categories/rails'>rails (1)</a></li><li><a href='/blog/categories/review'>review (2)</a></li><li><a href='/blog/categories/ruby'>ruby (6)</a></li><li><a href='/blog/categories/ruby-on-rails'>ruby on rails (2)</a></li><li><a href='/blog/categories/rust'>rust (6)</a></li><li><a href='/blog/categories/sass'>sass (1)</a></li><li><a href='/blog/categories/sass-rails'>sass-rails (1)</a></li><li><a href='/blog/categories/scrum'>scrum (1)</a></li><li><a href='/blog/categories/tasks'>tasks (2)</a></li><li><a href='/blog/categories/testing'>testing (1)</a></li><li><a href='/blog/categories/travis-ci'>travis ci (1)</a></li><li><a href='/blog/categories/weiqi'>weiqi (2)</a></li><li><a href='/blog/categories/workaround'>workaround (1)</a></li></ul>
+  <ul id="category-list"><li><a href='/blog/categories/agile'>agile (1)</a></li><li><a href='/blog/categories/ai'>ai (3)</a></li><li><a href='/blog/categories/artificial-intelligence'>artificial intelligence (3)</a></li><li><a href='/blog/categories/baduk'>baduk (3)</a></li><li><a href='/blog/categories/book-club'>book club (5)</a></li><li><a href='/blog/categories/book-review'>book review (2)</a></li><li><a href='/blog/categories/books'>books (1)</a></li><li><a href='/blog/categories/ci'>ci (2)</a></li><li><a href='/blog/categories/compile-time-polymorphism'>compile time polymorphism (1)</a></li><li><a href='/blog/categories/concurrency'>concurrency (2)</a></li><li><a href='/blog/categories/continuous-integration'>continuous integration (2)</a></li><li><a href='/blog/categories/eloquent-ruby'>eloquent ruby (4)</a></li><li><a href='/blog/categories/emacs'>emacs (1)</a></li><li><a href='/blog/categories/go'>go (3)</a></li><li><a href='/blog/categories/goos'>goos (1)</a></li><li><a href='/blog/categories/hack'>hack (1)</a></li><li><a href='/blog/categories/hexagonal-rails'>hexagonal rails (1)</a></li><li><a href='/blog/categories/inspeqtor'>inspeqtor (1)</a></li><li><a href='/blog/categories/iomrascálaí'>iomrascálaí (4)</a></li><li><a href='/blog/categories/jim-weirich'>jim weirich (1)</a></li><li><a href='/blog/categories/launchd'>launchd (1)</a></li><li><a href='/blog/categories/learning-rust'>learning rust (4)</a></li><li><a href='/blog/categories/learning-rust-tasks-and-messages'>learning rust tasks and messages (2)</a></li><li><a href='/blog/categories/lisp'>lisp (1)</a></li><li><a href='/blog/categories/management'>management (1)</a></li><li><a href='/blog/categories/matt-wynne'>matt wynne (1)</a></li><li><a href='/blog/categories/monit'>monit (1)</a></li><li><a href='/blog/categories/pair-programming'>pair programming (2)</a></li><li><a href='/blog/categories/polymorphism'>polymorphism (1)</a></li><li><a href='/blog/categories/process-monitoring'>process monitoring (1)</a></li><li><a href='/blog/categories/programming'>programming (5)</a></li><li><a href='/blog/categories/qa'>qa (1)</a></li><li><a href='/blog/categories/quality-assurance'>quality assurance (1)</a></li><li><a href='/blog/categories/rails'>rails (1)</a></li><li><a href='/blog/categories/review'>review (2)</a></li><li><a href='/blog/categories/ruby'>ruby (6)</a></li><li><a href='/blog/categories/ruby-on-rails'>ruby on rails (2)</a></li><li><a href='/blog/categories/rust'>rust (7)</a></li><li><a href='/blog/categories/sass'>sass (1)</a></li><li><a href='/blog/categories/sass-rails'>sass-rails (1)</a></li><li><a href='/blog/categories/scrum'>scrum (1)</a></li><li><a href='/blog/categories/tasks'>tasks (2)</a></li><li><a href='/blog/categories/testing'>testing (1)</a></li><li><a href='/blog/categories/travis-ci'>travis ci (1)</a></li><li><a href='/blog/categories/weiqi'>weiqi (3)</a></li><li><a href='/blog/categories/workaround'>workaround (1)</a></li></ul>
 </section>
 
   

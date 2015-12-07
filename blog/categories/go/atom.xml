@@ -4,7 +4,7 @@
   <title><![CDATA[Category: go | Urban Hafner]]></title>
   <link href="http://bettong.net/blog/categories/go/atom.xml" rel="self"/>
   <link href="http://bettong.net/"/>
-  <updated>2015-07-03T08:22:25+02:00</updated>
+  <updated>2015-12-07T18:00:44+01:00</updated>
   <id>http://bettong.net/</id>
   <author>
     <name><![CDATA[Urban Hafner]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Iomrascálaí 0.3.0 released]]></title>
+    <link href="http://bettong.net/2015/12/07/iomrascalai-0-dot-3-0-released/"/>
+    <updated>2015-12-07T17:29:23+01:00</updated>
+    <id>http://bettong.net/2015/12/07/iomrascalai-0-dot-3-0-released</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s been a while since I wrote about <a href="https://github.com/ujh/iomrascalai">Iomrascálaí</a> the engine for the <a href="https://en.wikipedia.org/wiki/Go_(game)">game of Go</a> I&rsquo;m writing in Rust. I will try to do it a bit more often from now on as I&rsquo;ve finally found the motivation to work on it again.</p>
+
+<p>So today I&rsquo;d like to announce <a href="https://github.com/ujh/iomrascalai/releases/tag/0.3.0">version 0.3.0</a>! It&rsquo;s been in the works since September and included two big improvements:</p>
+
+<ol>
+<li>We&rsquo;re now using the RAVE heuristic in selecting which tree leaf to investigate next.</li>
+<li>We use a set of 3x3 patterns to guide both the tree exploration and the move selection in the playouts.</li>
+</ol>
+
+
+<p>These two changes together lead to a strength increase when playing against GnuGo of <em>~20% on 9x9</em> and <em>~25% on 13x13</em>! See the <a href="https://github.com/ujh/iomrascalai/releases/tag/0.3.0">release notes</a> and the <a href="https://github.com/ujh/iomrascalai/blob/master/CHANGELOG.md">change log</a> for detailed listings of what actually changed between 0.2.4 and 0.3.0.</p>
+
+<h2>The plan for 0.4</h2>
+
+<p>The main goal for 0.4 is to finally get close to equal strength with GnuGo on 19x19. A bit task but where&rsquo;s the fun in picking easy tasks? ;) To achieve this goal I&rsquo;m planning to work on the following issues:</p>
+
+<ol>
+<li><a href="https://github.com/ujh/iomrascalai/issues/201">Speed up the playouts</a>! Just 100 playouts per second on 19x19 is really slow and it&rsquo;s no wonder that the engine has no chance against GnuGo.</li>
+<li><a href="https://github.com/ujh/iomrascalai/issues/210">Add criticality to tree selection algorithm</a>. Apparently both Pachi and CrazyStone have had success with adding this as an additional term to the formula.</li>
+<li><a href="https://github.com/ujh/iomrascalai/issues/200">Tune the parameters using CLOP</a>. I&rsquo;ve moved the parameters into a config file so at least technically it&rsquo;s now easy to run experiments and optimize the parameters.</li>
+<li><a href="https://github.com/ujh/iomrascalai/issues/209">Continue searching when the results are unclear</a>. Various engines have had success with searching longer than the allocated time when the best move isn&rsquo;t clear (i.e. close to the second best move).</li>
+<li><a href="https://github.com/ujh/iomrascalai/issues/231">Use larger patterns</a>. Until now the engine only uses 3x3 patterns. It seems worthwhile to investigate if using larger patterns can help.</li>
+<li><a href="https://github.com/ujh/iomrascalai/issues/234">Use a DCNN to guide the search</a>. There&rsquo;s a pre-trained neural network that&rsquo;s in use by several engines to guide the search and it has improved the results significantly for them. It may be a good idea to investigate this, too.</li>
+</ol>
+
+
+<h2>Challenges</h2>
+
+<ol>
+<li>The main challenge is computation power! Running 500 games for 9x9 and 13x13 each already takes a few days. And adding 19x19 to the mix will mean that changes will take a long time to benchmark.</li>
+<li>The libraries to efficiently run the DCNN code (like Caffe of Tensorflow) have quite a lot of dependencies and it&rsquo;s not clear how easily they can be integrated with Rust. It will at least make compiling the bot more difficult for newcomers.</li>
+</ol>
+
+
+<p>Like I said, quite a challenging plan! But I&rsquo;m sure it will be a lot of fun. I will leave you with a link to talk by <a href="https://pragtob.wordpress.com/2015/11/21/slides-beating-go-thanks-to-the-power-of-randomness-rubyconf-2015/">Tobias Pfeiffer about computer Go</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Iomrascálaí: A great way to learn Rust or about AI]]></title>
