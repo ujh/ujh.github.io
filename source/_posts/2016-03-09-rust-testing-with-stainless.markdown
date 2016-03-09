@@ -26,7 +26,7 @@ authors = ["xetra11 <falke_88@hotmail.com>"]
 path = "src/renderay_core.rs"
 
 [dependencies]
-stainless = { git = "https://github.com/reem/stainless.git" }
+stainless = "*"
 ```
 
 So now let's look at the main entry point of the library. The code is just for illustration purposes and we don't really care what it does. We do however care about the first three lines.
