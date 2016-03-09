@@ -4,7 +4,7 @@
   <title><![CDATA[Urban Hafner]]></title>
   <link href="http://bettong.net/atom.xml" rel="self"/>
   <link href="http://bettong.net/"/>
-  <updated>2016-03-09T10:34:22+01:00</updated>
+  <updated>2016-03-09T12:33:15+01:00</updated>
   <id>http://bettong.net/</id>
   <author>
     <name><![CDATA[Urban Hafner]]></name>
@@ -41,7 +41,7 @@
 </span><span class='line'><span class="n">path</span> <span class="o">=</span> <span class="s">&quot;src/renderay_core.rs&quot;</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">[</span><span class="n">dependencies</span><span class="p">]</span>
-</span><span class='line'><span class="n">stainless</span> <span class="o">=</span> <span class="p">{</span> <span class="n">git</span> <span class="o">=</span> <span class="s">&quot;https://github.com/reem/stainless.git&quot;</span> <span class="p">}</span>
+</span><span class='line'><span class="n">stainless</span> <span class="o">=</span> <span class="s">&quot;*&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 

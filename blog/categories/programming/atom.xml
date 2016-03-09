@@ -4,7 +4,7 @@
   <title><![CDATA[Category: programming | Urban Hafner]]></title>
   <link href="http://bettong.net/blog/categories/programming/atom.xml" rel="self"/>
   <link href="http://bettong.net/"/>
-  <updated>2016-03-09T10:34:22+01:00</updated>
+  <updated>2016-03-09T12:33:15+01:00</updated>
   <id>http://bettong.net/</id>
   <author>
     <name><![CDATA[Urban Hafner]]></name>
@@ -31,7 +31,7 @@ authors = ["xetra11 &lt;falke_88@hotmail.com&gt;"]
 path = "src/renderay_core.rs"
 
 [dependencies]
-stainless = { git = "https://github.com/reem/stainless.git" }
+stainless = "*"
 </code></pre>
 
 <p>So now let&rsquo;s look at the main entry point of the library. The code is just for illustration purposes and we don&rsquo;t really care what it does. We do however care about the first three lines.</p>
