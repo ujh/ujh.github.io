@@ -1,0 +1,543 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rust Testing With Stainless - Urban Hafner</title>
+  <meta name="author" content="Urban Hafner">
+
+  
+  <meta name="description" content="A recent discussion in the issues of stainless prompted me to write a small blog post that explains the basics of testing in Rust using stainless. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://bettong.net/2016/03/09/rust-testing-with-stainless">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/articles.atom" rel="alternate" title="Urban Hafner" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Urban Hafner</a></h1>
+  
+    <h2>Ruby, Ruby on Rails, JavaScript programmer. Dabbling with Rust and agile methodologies on the side.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/articles.atom" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="bettong.net">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://urbanhafner.com/contact">Contact</a></li>
+  <li><a href="http://urbanhafner.com/resume">CV</a></li>
+  <li><a href="/reading-list">Reading List</a></li>
+  <li><a href="http://urbanhafnerphotography.com/">Photography</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Rust Testing With Stainless</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-03-09T09:39:07+01:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:39 am</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://bettong.net">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A <a href="https://github.com/reem/stainless/issues/48">recent discussion</a> in the issues of <a href="https://github.com/reem/stainless">stainless</a> prompted me to write a small blog post that explains the basics of testing in Rust using stainless. <em>Note that stainless only works with the nightly Rust compiler as it requires compiler plugins.</em></p>
+
+<p>First of all, let&rsquo;s set up the project. We will build a library and write unit as well as integration tests for it (code by <a href="https://github.com/xetra11">xetra11</a>). Here&rsquo;s the <code>Cargo.toml</code> file:</p>
+
+<figure class='code'><figcaption><span>Cargo.toml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='toml'><span class='line'><span class="p">[</span><span class="n">package</span><span class="p">]</span>
+</span><span class='line'><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;renderay_rs&quot;</span>
+</span><span class='line'><span class="n">version</span> <span class="o">=</span> <span class="s">&quot;0.0.1&quot;</span>
+</span><span class='line'><span class="n">authors</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;xetra11 &lt;falke_88@hotmail.com&gt;&quot;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="n">lib</span><span class="p">]</span>
+</span><span class='line'><span class="n">path</span> <span class="o">=</span> <span class="s">&quot;src/renderay_core.rs&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="n">dependencies</span><span class="p">]</span>
+</span><span class='line'><span class="n">stainless</span> <span class="o">=</span> <span class="p">{</span> <span class="n">git</span> <span class="o">=</span> <span class="s">&quot;https://github.com/reem/stainless.git&quot;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So now let&rsquo;s look at the main entry point of the library. The code is just for illustration purposes and we don&rsquo;t really care what it does. We do however care about the first three lines.</p>
+
+<p><code>#![feature(plugin)]</code> tells the Rust compiler to turn on support for compiler plugins. As stainless is a compiler plugin this is needed.</p>
+
+<p>The line after that is a bit more complicated. It does the following: It first checks if we are currently compiling for testing (e.g. running <code>cargo test</code>) If that is the case then we add the line <code>#![plugin(stainless)]</code> which enables stainless. If we don&rsquo;t compile for testing then we do nothing, i.e. we don&rsquo;t enable stainless when compiling normally (e.g. when running <code>cargo build</code>) <a href="http://chrismorgan.info/blog/rust-cfg_attr.html">See this blog post</a> for an in depth explanation if <code>cfg_attr</code>.</p>
+
+<p>And then we define a submodule called <code>test</code>. This is where we will write our unit tests.</p>
+
+<figure class='code'><figcaption><span>src/renderay_core.rs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="err">#</span><span class="o">!</span><span class="p">[</span><span class="n">feature</span><span class="p">(</span><span class="n">plugin</span><span class="p">)]</span>
+</span><span class='line'><span class="err">#</span><span class="o">!</span><span class="p">[</span><span class="n">cfg_attr</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">plugin</span><span class="p">(</span><span class="n">stainless</span><span class="p">))]</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">mod</span> <span class="n">test</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">pub</span> <span class="k">struct</span> <span class="n">Canvas</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">width</span><span class="o">:</span> <span class="n">usize</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">height</span><span class="o">:</span> <span class="n">usize</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">array</span><span class="o">:</span> <span class="n">Vec</span><span class="o">&lt;</span><span class="n">char</span><span class="o">&gt;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">impl</span> <span class="n">Canvas</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">pub</span> <span class="k">fn</span> <span class="n">new</span><span class="p">(</span><span class="n">width</span><span class="o">:</span> <span class="n">usize</span><span class="p">,</span> <span class="n">height</span><span class="o">:</span> <span class="n">usize</span><span class="p">,</span> <span class="n">array</span><span class="o">:</span> <span class="n">Vec</span><span class="o">&lt;</span><span class="n">char</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Canvas</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">Canvas</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">width</span><span class="o">:</span> <span class="n">width</span><span class="p">,</span>
+</span><span class='line'>            <span class="n">height</span><span class="o">:</span> <span class="n">height</span><span class="p">,</span>
+</span><span class='line'>            <span class="n">array</span><span class="o">:</span> <span class="n">array</span><span class="p">,</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">pub</span> <span class="k">fn</span> <span class="n">array</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">&amp;</span><span class="n">Vec</span><span class="o">&lt;</span><span class="n">char</span><span class="o">&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="bp">self</span><span class="p">.</span><span class="n">array</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">pub</span> <span class="k">struct</span> <span class="n">CanvasRenderer</span><span class="o">&lt;</span><span class="nl">&#39;a</span><span class="o">&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">canvas</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">&#39;a</span> <span class="k">mut</span> <span class="n">Canvas</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">impl</span> <span class="o">&lt;</span><span class="nl">&#39;a</span><span class="o">&gt;</span><span class="n">CanvasRenderer</span><span class="o">&lt;</span><span class="nl">&#39;a</span><span class="o">&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">pub</span> <span class="k">fn</span> <span class="n">new</span><span class="p">(</span><span class="n">canvas</span><span class="o">:</span> <span class="o">&amp;</span><span class="n">&#39;a</span> <span class="k">mut</span> <span class="n">Canvas</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CanvasRenderer</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">CanvasRenderer</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">canvas</span><span class="o">:</span> <span class="n">canvas</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">pub</span> <span class="k">fn</span> <span class="n">render_point</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="bp">self</span><span class="p">,</span> <span class="n">fill_symbol</span><span class="o">:</span> <span class="n">char</span><span class="p">,</span> <span class="n">pos_x</span><span class="o">:</span> <span class="n">usize</span><span class="p">,</span> <span class="n">pos_y</span><span class="o">:</span> <span class="n">usize</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">let</span> <span class="n">canvas</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="bp">self</span><span class="p">.</span><span class="n">canvas</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">let</span> <span class="k">mut</span> <span class="n">array_to_fill</span> <span class="o">=</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">canvas</span><span class="p">.</span><span class="n">array</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">let</span> <span class="n">max_width</span><span class="o">:</span> <span class="n">usize</span> <span class="o">=</span> <span class="n">canvas</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">let</span> <span class="n">max_height</span><span class="o">:</span> <span class="n">usize</span> <span class="o">=</span> <span class="n">canvas</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">let</span> <span class="n">pos_to_draw</span> <span class="o">=</span> <span class="n">pos_x</span> <span class="o">*</span> <span class="n">pos_y</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="n">pos_x</span> <span class="o">&gt;</span> <span class="n">max_width</span> <span class="o">||</span> <span class="n">pos_y</span> <span class="o">&gt;</span> <span class="n">max_height</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">panic</span><span class="o">!</span><span class="p">(</span><span class="s">&quot;Coordinates are out of array bounds&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">array_to_fill</span><span class="p">[</span><span class="n">pos_to_draw</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill_symbol</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Alright, so let&rsquo;s have a look at the unit tests. First we configure the module as a test module (doesn&rsquo;t need to be compiled normally). Then we add our <code>use</code> declarations for the things we want to use in our tests. Due to implementation details of stainless we need to <code>pub use</code>. And they also need to be <em>outside</em> of the <code>describe!</code> blocks.</p>
+
+<p>And then we come to the actual things added by stainless. <code>describe!</code>, <code>before_each</code>, and <code>it</code>. If you know <a href="http://rspec.info/">rspec</a> then this will look very familiar. <code>it</code> is used to define individual tests and <code>describe!</code> is used to group tests. And <code>before_each</code> is executed before each test in a group of tests.</p>
+
+<p><em>If you look closely you will notice that due to the fact that the test module is a submodule of the code that we&rsquo;re testing we have access to private functions and private struct fields.</em></p>
+
+<figure class='code'><figcaption><span>src/test.rs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="err">#</span><span class="o">!</span><span class="p">[</span><span class="n">cfg</span><span class="p">(</span><span class="n">test</span><span class="p">)]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">pub</span> <span class="kn">use</span> <span class="n">super</span><span class="o">::</span><span class="n">CanvasRenderer</span><span class="p">;</span>
+</span><span class='line'><span class="k">pub</span> <span class="kn">use</span> <span class="n">super</span><span class="o">::</span><span class="n">Canvas</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span><span class="o">!</span> <span class="n">canvas_renderer</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">before_each</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">let</span> <span class="k">mut</span> <span class="n">canvas</span> <span class="o">=</span> <span class="n">Canvas</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">width</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span>
+</span><span class='line'>            <span class="n">height</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span>
+</span><span class='line'>            <span class="n">array</span><span class="o">:</span> <span class="n">vec</span><span class="o">!</span><span class="p">[</span><span class="sc">&#39;x&#39;</span><span class="p">;</span><span class="mi">10</span><span class="o">*</span><span class="mi">10</span><span class="p">],</span>
+</span><span class='line'>        <span class="p">};</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s">&quot;should fill given char at given coords&quot;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="kd">let</span> <span class="k">mut</span> <span class="n">renderer</span><span class="o">:</span> <span class="n">CanvasRenderer</span> <span class="o">=</span> <span class="n">CanvasRenderer</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">canvas</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">renderer</span><span class="p">.</span><span class="n">render_point</span><span class="p">(</span><span class="sc">&#39;x&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">assert_eq</span><span class="o">!</span><span class="p">(</span><span class="sc">&#39;x&#39;</span><span class="p">,</span> <span class="n">canvas</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="mi">3</span><span class="o">*</span><span class="mi">3</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Oh, and as we&rsquo;re writing a library we of course should also write integration tests. These go into the <code>tests/</code> folder of the project. It looks similar to our unit tests, but a few things are different:</p>
+
+<ol>
+<li>We can just use <code>#![plugin(stainless)]</code> as we will never compile this code outside of our tests.</li>
+<li>We need to add the library we&rsquo;re building as an external crate (through <code>extern crate renderay_rs;</code>) as this is a separate executable.</li>
+<li>We cannot use private functions of struct fields here. So we need to use <code>Canvas::new</code> and a getter for the array.</li>
+</ol>
+
+
+<figure class='code'><figcaption><span>tests/render_point.rs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='rust'><span class='line'><span class="err">#</span><span class="o">!</span><span class="p">[</span><span class="n">feature</span><span class="p">(</span><span class="n">plugin</span><span class="p">)]</span>
+</span><span class='line'><span class="err">#</span><span class="o">!</span><span class="p">[</span><span class="n">plugin</span><span class="p">(</span><span class="n">stainless</span><span class="p">)]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">extern</span> <span class="n">crate</span> <span class="n">renderay_rs</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">pub</span> <span class="kn">use</span> <span class="n">renderay_rs</span><span class="o">::</span><span class="n">CanvasRenderer</span><span class="p">;</span>
+</span><span class='line'><span class="k">pub</span> <span class="kn">use</span> <span class="n">renderay_rs</span><span class="o">::</span><span class="n">Canvas</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">describe</span><span class="o">!</span> <span class="n">integration_test</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">before_each</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">let</span> <span class="k">mut</span> <span class="n">canvas</span> <span class="o">=</span> <span class="n">Canvas</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">vec</span><span class="o">!</span><span class="p">[</span><span class="sc">&#39;x&#39;</span><span class="p">;</span><span class="mi">10</span><span class="o">*</span><span class="mi">10</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s">&quot;should fill given char at given coords&quot;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="kd">let</span> <span class="k">mut</span> <span class="n">renderer</span><span class="o">:</span> <span class="n">CanvasRenderer</span> <span class="o">=</span> <span class="n">CanvasRenderer</span><span class="o">::</span><span class="n">new</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="n">canvas</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">renderer</span><span class="p">.</span><span class="n">render_point</span><span class="p">(</span><span class="sc">&#39;x&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">assert_eq</span><span class="o">!</span><span class="p">(</span><span class="sc">&#39;x&#39;</span><span class="p">,</span> <span class="n">canvas</span><span class="p">.</span><span class="n">array</span><span class="p">()[</span><span class="mi">3</span><span class="o">*</span><span class="mi">3</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And running the tests looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>uh@macaron:~/renderay_rs$ cargo test
+</span><span class='line'>    Running target/debug/render_point-f60500163e82a187
+</span><span class='line'>
+</span><span class='line'>running 1 test
+</span><span class='line'>test integration_test::should_fill_given_char_at_given_coords ... ok
+</span><span class='line'>
+</span><span class='line'>test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</span><span class='line'>
+</span><span class='line'>    Running target/debug/renderay_rs-42155898cc4eb950
+</span><span class='line'>
+</span><span class='line'>running 1 test
+</span><span class='line'>test test::canvas_renderer::should_fill_given_char_at_given_coords ... ok
+</span><span class='line'>
+</span><span class='line'>test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</span><span class='line'>
+</span><span class='line'>    Doc-tests renderay_rs
+</span><span class='line'>
+</span><span class='line'>running 0 tests
+</span><span class='line'>
+</span><span class='line'>test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Urban Hafner</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-03-09T09:39:07+01:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>9:39 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/learning-rust/'>learning rust</a>, <a class='category' href='/blog/categories/programming/'>programming</a>, <a class='category' href='/blog/categories/rust/'>rust</a>, <a class='category' href='/blog/categories/stainless/'>stainless</a>, <a class='category' href='/blog/categories/tdd/'>tdd</a>, <a class='category' href='/blog/categories/testing/'>testing</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://bettong.net/2016/03/09/rust-testing-with-stainless/" data-via="" data-counturl="http://bettong.net/2016/03/09/rust-testing-with-stainless/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2015/12/07/iomrascalai-0-dot-3-0-released/" title="Previous Post: Iomrascálaí 0.3.0 released">&laquo; Iomrascálaí 0.3.0 released</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Pair Programming</h1>
+  <p>
+    I&#8217;m always happy to pair program. Either
+    on <a href="http://github.com/ujh/iomrascalai">Iomrascálaí</a>
+    (written in <a href="http://rust-lang.org">Rust</a>) or on any
+    Ruby, Ruby on Rails, or JavaScript project.
+  </p>
+  <p>
+    Just <a href="mailto:contact@urbanhafner.com">send me an email</a>
+    and we can set something up!
+  </p>
+</section>
+<section>
+  <h1>Categories</h1>
+  <ul id="category-list"><li><a href='/blog/categories/agile'>agile (1)</a></li><li><a href='/blog/categories/ai'>ai (3)</a></li><li><a href='/blog/categories/artificial-intelligence'>artificial intelligence (3)</a></li><li><a href='/blog/categories/baduk'>baduk (3)</a></li><li><a href='/blog/categories/book-club'>book club (5)</a></li><li><a href='/blog/categories/book-review'>book review (2)</a></li><li><a href='/blog/categories/books'>books (1)</a></li><li><a href='/blog/categories/ci'>ci (2)</a></li><li><a href='/blog/categories/compile-time-polymorphism'>compile time polymorphism (1)</a></li><li><a href='/blog/categories/concurrency'>concurrency (2)</a></li><li><a href='/blog/categories/continuous-integration'>continuous integration (2)</a></li><li><a href='/blog/categories/eloquent-ruby'>eloquent ruby (4)</a></li><li><a href='/blog/categories/emacs'>emacs (1)</a></li><li><a href='/blog/categories/go'>go (3)</a></li><li><a href='/blog/categories/goos'>goos (1)</a></li><li><a href='/blog/categories/hack'>hack (1)</a></li><li><a href='/blog/categories/hexagonal-rails'>hexagonal rails (1)</a></li><li><a href='/blog/categories/inspeqtor'>inspeqtor (1)</a></li><li><a href='/blog/categories/iomrascálaí'>iomrascálaí (4)</a></li><li><a href='/blog/categories/jim-weirich'>jim weirich (1)</a></li><li><a href='/blog/categories/launchd'>launchd (1)</a></li><li><a href='/blog/categories/learning-rust'>learning rust (5)</a></li><li><a href='/blog/categories/learning-rust-tasks-and-messages'>learning rust tasks and messages (2)</a></li><li><a href='/blog/categories/lisp'>lisp (1)</a></li><li><a href='/blog/categories/management'>management (1)</a></li><li><a href='/blog/categories/matt-wynne'>matt wynne (1)</a></li><li><a href='/blog/categories/monit'>monit (1)</a></li><li><a href='/blog/categories/pair-programming'>pair programming (2)</a></li><li><a href='/blog/categories/polymorphism'>polymorphism (1)</a></li><li><a href='/blog/categories/process-monitoring'>process monitoring (1)</a></li><li><a href='/blog/categories/programming'>programming (6)</a></li><li><a href='/blog/categories/qa'>qa (1)</a></li><li><a href='/blog/categories/quality-assurance'>quality assurance (1)</a></li><li><a href='/blog/categories/rails'>rails (1)</a></li><li><a href='/blog/categories/review'>review (2)</a></li><li><a href='/blog/categories/ruby'>ruby (6)</a></li><li><a href='/blog/categories/ruby-on-rails'>ruby on rails (2)</a></li><li><a href='/blog/categories/rust'>rust (8)</a></li><li><a href='/blog/categories/sass'>sass (1)</a></li><li><a href='/blog/categories/sass-rails'>sass-rails (1)</a></li><li><a href='/blog/categories/scrum'>scrum (1)</a></li><li><a href='/blog/categories/stainless'>stainless (1)</a></li><li><a href='/blog/categories/tasks'>tasks (2)</a></li><li><a href='/blog/categories/tdd'>tdd (1)</a></li><li><a href='/blog/categories/testing'>testing (2)</a></li><li><a href='/blog/categories/travis-ci'>travis ci (1)</a></li><li><a href='/blog/categories/weiqi'>weiqi (3)</a></li><li><a href='/blog/categories/workaround'>workaround (1)</a></li></ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Urban Hafner -
+  <a href="/imprint">Imprint</a>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'bettong-net';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://bettong.net/2016/03/09/rust-testing-with-stainless/';
+        var disqus_url = 'http://bettong.net/2016/03/09/rust-testing-with-stainless/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+<script src="//static.getclicky.com/js" type="text/javascript"></script>
+<script type="text/javascript">try{ clicky.init(100625780); }catch(e){}</script>
+<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100625780ns.gif" /></p></noscript>
+
+
+</body>
+</html>

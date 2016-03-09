@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: stainless | Urban Hafner]]></title>
+  <link href="http://bettong.net/blog/categories/stainless/atom.xml" rel="self"/>
+  <link href="http://bettong.net/"/>
+  <updated>2016-03-09T10:34:22+01:00</updated>
+  <id>http://bettong.net/</id>
+  <author>
+    <name><![CDATA[Urban Hafner]]></name>
+    <email><![CDATA[contact@urbanhafner.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rust testing with stainless]]></title>
+    <link href="http://bettong.net/2016/03/09/rust-testing-with-stainless/"/>
+    <updated>2016-03-09T09:39:07+01:00</updated>
+    <id>http://bettong.net/2016/03/09/rust-testing-with-stainless</id>
+    <content type="html"><![CDATA[<p>A <a href="https://github.com/reem/stainless/issues/48">recent discussion</a> in the issues of <a href="https://github.com/reem/stainless">stainless</a> prompted me to write a small blog post that explains the basics of testing in Rust using stainless. <em>Note that stainless only works with the nightly Rust compiler as it requires compiler plugins.</em></p>
+
+<p>First of all, let&rsquo;s set up the project. We will build a library and write unit as well as integration tests for it (code by <a href="https://github.com/xetra11">xetra11</a>). Here&rsquo;s the <code>Cargo.toml</code> file:</p>
+
+<pre><code class="toml Cargo.toml">[package]
+name = "renderay_rs"
+version = "0.0.1"
+authors = ["xetra11 &lt;falke_88@hotmail.com&gt;"]
+
+[lib]
+path = "src/renderay_core.rs"
+
+[dependencies]
+stainless = { git = "https://github.com/reem/stainless.git" }
+</code></pre>
+
+<p>So now let&rsquo;s look at the main entry point of the library. The code is just for illustration purposes and we don&rsquo;t really care what it does. We do however care about the first three lines.</p>
+
+<p><code>#![feature(plugin)]</code> tells the Rust compiler to turn on support for compiler plugins. As stainless is a compiler plugin this is needed.</p>
+
+<p>The line after that is a bit more complicated. It does the following: It first checks if we are currently compiling for testing (e.g. running <code>cargo test</code>) If that is the case then we add the line <code>#![plugin(stainless)]</code> which enables stainless. If we don&rsquo;t compile for testing then we do nothing, i.e. we don&rsquo;t enable stainless when compiling normally (e.g. when running <code>cargo build</code>) <a href="http://chrismorgan.info/blog/rust-cfg_attr.html">See this blog post</a> for an in depth explanation if <code>cfg_attr</code>.</p>
+
+<p>And then we define a submodule called <code>test</code>. This is where we will write our unit tests.</p>
+
+<pre><code class="rust src/renderay_core.rs">#![feature(plugin)]
+#![cfg_attr(test, plugin(stainless))]
+
+mod test;
+
+pub struct Canvas {
+    width: usize,
+    height: usize,
+    array: Vec&lt;char&gt;
+}
+
+impl Canvas {
+
+    pub fn new(width: usize, height: usize, array: Vec&lt;char&gt;) -&gt; Canvas {
+        Canvas {
+            width: width,
+            height: height,
+            array: array,
+        }
+    }
+
+    pub fn array(&amp;self) -&gt; &amp;Vec&lt;char&gt; {
+        &amp;self.array
+    }
+
+}
+
+pub struct CanvasRenderer&lt;'a&gt; {
+    canvas: &amp;'a mut Canvas
+}
+
+impl &lt;'a&gt;CanvasRenderer&lt;'a&gt; {
+    pub fn new(canvas: &amp;'a mut Canvas) -&gt; CanvasRenderer {
+        CanvasRenderer {
+            canvas: canvas
+        }
+    }
+
+    pub fn render_point(&amp;mut self, fill_symbol: char, pos_x: usize, pos_y: usize) {
+        let canvas = &amp;mut self.canvas;
+        let mut array_to_fill = &amp;mut canvas.array;
+        let max_width: usize = canvas.width;
+        let max_height: usize = canvas.height;
+        let pos_to_draw = pos_x * pos_y;
+
+        if pos_x &gt; max_width || pos_y &gt; max_height {
+            panic!("Coordinates are out of array bounds")
+        }
+
+        array_to_fill[pos_to_draw] = fill_symbol;
+
+    }
+}
+</code></pre>
+
+<p>Alright, so let&rsquo;s have a look at the unit tests. First we configure the module as a test module (doesn&rsquo;t need to be compiled normally). Then we add our <code>use</code> declarations for the things we want to use in our tests. Due to implementation details of stainless we need to <code>pub use</code>. And they also need to be <em>outside</em> of the <code>describe!</code> blocks.</p>
+
+<p>And then we come to the actual things added by stainless. <code>describe!</code>, <code>before_each</code>, and <code>it</code>. If you know <a href="http://rspec.info/">rspec</a> then this will look very familiar. <code>it</code> is used to define individual tests and <code>describe!</code> is used to group tests. And <code>before_each</code> is executed before each test in a group of tests.</p>
+
+<p><em>If you look closely you will notice that due to the fact that the test module is a submodule of the code that we&rsquo;re testing we have access to private functions and private struct fields.</em></p>
+
+<pre><code class="rust src/test.rs">#![cfg(test)]
+
+pub use super::CanvasRenderer;
+pub use super::Canvas;
+
+describe! canvas_renderer {
+
+    before_each {
+        let mut canvas = Canvas {
+            width: 10,
+            height: 10,
+            array: vec!['x';10*10],
+        };
+    }
+
+    it "should fill given char at given coords" {
+        {
+            let mut renderer: CanvasRenderer = CanvasRenderer::new(&amp;mut canvas);
+            renderer.render_point('x', 3,3);
+        }
+        assert_eq!('x', canvas.array[3*3]);
+    }
+}
+</code></pre>
+
+<p>Oh, and as we&rsquo;re writing a library we of course should also write integration tests. These go into the <code>tests/</code> folder of the project. It looks similar to our unit tests, but a few things are different:</p>
+
+<ol>
+<li>We can just use <code>#![plugin(stainless)]</code> as we will never compile this code outside of our tests.</li>
+<li>We need to add the library we&rsquo;re building as an external crate (through <code>extern crate renderay_rs;</code>) as this is a separate executable.</li>
+<li>We cannot use private functions of struct fields here. So we need to use <code>Canvas::new</code> and a getter for the array.</li>
+</ol>
+
+
+<pre><code class="rust tests/render_point.rs">#![feature(plugin)]
+#![plugin(stainless)]
+
+extern crate renderay_rs;
+
+pub use renderay_rs::CanvasRenderer;
+pub use renderay_rs::Canvas;
+
+describe! integration_test {
+
+    before_each {
+        let mut canvas = Canvas::new(10, 10, vec!['x';10*10]);
+    }
+
+    it "should fill given char at given coords" {
+        {
+            let mut renderer: CanvasRenderer = CanvasRenderer::new(&amp;mut canvas);
+            renderer.render_point('x', 3,3);
+        }
+        assert_eq!('x', canvas.array()[3*3]);
+    }
+
+}
+</code></pre>
+
+<p>And running the tests looks like this:</p>
+
+<pre><code class="text">uh@macaron:~/renderay_rs$ cargo test
+    Running target/debug/render_point-f60500163e82a187
+
+running 1 test
+test integration_test::should_fill_given_char_at_given_coords ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+    Running target/debug/renderay_rs-42155898cc4eb950
+
+running 1 test
+test test::canvas_renderer::should_fill_given_char_at_given_coords ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+    Doc-tests renderay_rs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
