@@ -9,7 +9,8 @@
   <meta name="author" content="Urban Hafner">
 
   
-  <meta name="description" content="Working with Ruby on Rails in my projects I&rsquo;m used to running continuous integration on Travis CI. As this is free of charge for open source &hellip;">
+  <meta name="description" content="As I currently work on a distributed team and we&rsquo;re trying to do more
+and more pair programming I decided that it&rsquo;s time to give Emacs a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +69,50 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/05/15/my-emacs-configuration/">My Emacs Configuration</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-05-15T09:45:22+02:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:45 am</span></time>
+        
+           | <a href="/2014/05/15/my-emacs-configuration/#disqus_thread"
+             data-disqus-identifier="http://bettong.net/2014/05/15/my-emacs-configuration/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As I currently work on a distributed team and we&rsquo;re trying to do more
+and more pair programming I decided that it&rsquo;s time to give Emacs a try
+again. Using <a href="http://tmate.io/">tmate</a> in combination with either
+Emacs or Vim seems to be the way to go due to the lower latency than a
+proper screen sharing solution.</p>
+
+<p>Right now my Emacs configuration is rather basic, but I think it could
+be a good starting point for other people, too. This is why I made it
+available as a <a href="https://github.com/ujh/emacs.d">Github project</a>.</p>
+
+<p>If you have any problems with it let me know and more importantly (at
+least for me personally) if you notice anything that I should do
+differently I&rsquo;d love to hear from you.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -506,122 +551,9 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/10/27/notes-on-eloquent-ruby-number-1/">Notes on Eloquent Ruby #1</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2011-10-27T13:47:00+02:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>1:47 pm</span></time>
-        
-           | <a href="/2011/10/27/notes-on-eloquent-ruby-number-1/#disqus_thread"
-             data-disqus-identifier="http://bettong.net/2011/10/27/notes-on-eloquent-ruby-number-1/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The <a href="http://rubyrogues.com/">Ruby Rogues</a> book club is currently reading
-Eloquent Ruby and I thought I&rsquo;d tag along and read the book, too. I&rsquo;ll be
-posting my thoughts on the book in this post and in a few future posts.</p>
-
-<h2>Chapter 3: Take Advantage of Ruby&rsquo;s Smart Collections</h2>
-
-<p>This chapter details the use of the Hash and Array classes and that
-they can be used instead of specialized custom classes in most cases.
-That&rsquo;s not really surprising and also that&rsquo;s not what I&rsquo;m taking away
-from this chapter. The good point are the last two pages where he
-mentions that there are cases where you shouldn&rsquo;t use Array or Hash but
-rather use specialized collections when they make sense.</p>
-
-<p>His example is the following: Imagine that we want to know if a word
-appears in a document. We could either use a Hash for this</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">word_is_there</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class='line'><span class="n">words</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">word</span><span class="o">|</span> <span class="n">word_is_there</span><span class="o">[</span><span class="n">word</span><span class="o">]</span> <span class="o">=</span> <span class="kp">true</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>or an Array</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">unique</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'><span class="n">words</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">word</span><span class="o">|</span> <span class="n">unique</span> <span class="o">&lt;&lt;</span> <span class="n">word</span> <span class="k">unless</span> <span class="n">unique</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">word</span><span class="p">)}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>However both approaches aren&rsquo;t ideal because in the case of the Hash we
-aren&rsquo;t interested in the values we store and in the case of the Array we
-need to make sure the Array contains no duplicates. It turns out that in
-this case we should use the Ruby Set class because it&rsquo;s just made for
-this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;set&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">word_set</span> <span class="o">=</span> <span class="no">Set</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Other collections from the standard library</h2>
-
-<p>This got me thinking and I went through the standard library to look for
-other collections that you make overlook:</p>
-
-<h3>Struct</h3>
-
-<p>Many times we use Hashes to store data like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">first_name</span><span class="p">:</span> <span class="s2">&quot;Jon&quot;</span><span class="p">,</span> <span class="n">last_name</span><span class="p">:</span> <span class="s2">&quot;Snow&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If we need to pass that data around a lot it might be cleaner to create
-a dedicated class for it. However if it&rsquo;s just a container for the data
-and doesn&rsquo;t have any other functionality we could also use a struct.
-This way we get a more expressive name:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Struct</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="ss">:first_name</span><span class="p">,</span> <span class="ss">:last_name</span><span class="p">)</span>
-</span><span class='line'><span class="ss">Struct</span><span class="p">:</span><span class="ss">:Name</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Jon&quot;</span><span class="p">,</span> <span class="s2">&quot;Snow&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Matrix and Vector</h3>
-
-<p>Matrices and Vectors could be represented by Arrays but there&rsquo;s really
-no point in not using the Matrix and Vector classes provided by the matrix
-standard library.</p>
-
-<h3>Anything else?</h3>
-
-<p>A quick look through the standard library didn&rsquo;t reveal any other
-collections. At least I didn&rsquo;t see any, but I&rsquo;d be happy to be proven
-wrong.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/page3">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -646,7 +578,7 @@ wrong.</p>
 </section>
 <section>
   <h1>Categories</h1>
-  <ul id="category-list"><li><a href='/blog/categories/agile'>agile (1)</a></li><li><a href='/blog/categories/ai'>ai (3)</a></li><li><a href='/blog/categories/artificial-intelligence'>artificial intelligence (3)</a></li><li><a href='/blog/categories/baduk'>baduk (3)</a></li><li><a href='/blog/categories/book-club'>book club (5)</a></li><li><a href='/blog/categories/book-review'>book review (2)</a></li><li><a href='/blog/categories/books'>books (1)</a></li><li><a href='/blog/categories/ci'>ci (2)</a></li><li><a href='/blog/categories/compile-time-polymorphism'>compile time polymorphism (1)</a></li><li><a href='/blog/categories/concurrency'>concurrency (2)</a></li><li><a href='/blog/categories/continuous-integration'>continuous integration (2)</a></li><li><a href='/blog/categories/eloquent-ruby'>eloquent ruby (4)</a></li><li><a href='/blog/categories/emacs'>emacs (1)</a></li><li><a href='/blog/categories/go'>go (3)</a></li><li><a href='/blog/categories/goos'>goos (1)</a></li><li><a href='/blog/categories/hack'>hack (1)</a></li><li><a href='/blog/categories/hexagonal-rails'>hexagonal rails (1)</a></li><li><a href='/blog/categories/inspeqtor'>inspeqtor (1)</a></li><li><a href='/blog/categories/iomrascálaí'>iomrascálaí (4)</a></li><li><a href='/blog/categories/jim-weirich'>jim weirich (1)</a></li><li><a href='/blog/categories/launchd'>launchd (1)</a></li><li><a href='/blog/categories/learning-rust'>learning rust (5)</a></li><li><a href='/blog/categories/learning-rust-tasks-and-messages'>learning rust tasks and messages (2)</a></li><li><a href='/blog/categories/lisp'>lisp (1)</a></li><li><a href='/blog/categories/management'>management (1)</a></li><li><a href='/blog/categories/matt-wynne'>matt wynne (1)</a></li><li><a href='/blog/categories/monit'>monit (1)</a></li><li><a href='/blog/categories/pair-programming'>pair programming (2)</a></li><li><a href='/blog/categories/polymorphism'>polymorphism (1)</a></li><li><a href='/blog/categories/process-monitoring'>process monitoring (1)</a></li><li><a href='/blog/categories/programming'>programming (6)</a></li><li><a href='/blog/categories/qa'>qa (1)</a></li><li><a href='/blog/categories/quality-assurance'>quality assurance (1)</a></li><li><a href='/blog/categories/rails'>rails (1)</a></li><li><a href='/blog/categories/review'>review (2)</a></li><li><a href='/blog/categories/ruby'>ruby (6)</a></li><li><a href='/blog/categories/ruby-on-rails'>ruby on rails (2)</a></li><li><a href='/blog/categories/rust'>rust (8)</a></li><li><a href='/blog/categories/sass'>sass (1)</a></li><li><a href='/blog/categories/sass-rails'>sass-rails (1)</a></li><li><a href='/blog/categories/scrum'>scrum (1)</a></li><li><a href='/blog/categories/stainless'>stainless (1)</a></li><li><a href='/blog/categories/tasks'>tasks (2)</a></li><li><a href='/blog/categories/tdd'>tdd (1)</a></li><li><a href='/blog/categories/testing'>testing (2)</a></li><li><a href='/blog/categories/travis-ci'>travis ci (1)</a></li><li><a href='/blog/categories/weiqi'>weiqi (3)</a></li><li><a href='/blog/categories/workaround'>workaround (1)</a></li></ul>
+  <ul id="category-list"><li><a href='/blog/categories/agile'>agile (1)</a></li><li><a href='/blog/categories/ai'>ai (3)</a></li><li><a href='/blog/categories/artificial-intelligence'>artificial intelligence (3)</a></li><li><a href='/blog/categories/baduk'>baduk (3)</a></li><li><a href='/blog/categories/book-club'>book club (5)</a></li><li><a href='/blog/categories/book-review'>book review (2)</a></li><li><a href='/blog/categories/books'>books (1)</a></li><li><a href='/blog/categories/ci'>ci (2)</a></li><li><a href='/blog/categories/compile-time-polymorphism'>compile time polymorphism (1)</a></li><li><a href='/blog/categories/concurrency'>concurrency (2)</a></li><li><a href='/blog/categories/continuous-integration'>continuous integration (2)</a></li><li><a href='/blog/categories/eloquent-ruby'>eloquent ruby (4)</a></li><li><a href='/blog/categories/emacs'>emacs (1)</a></li><li><a href='/blog/categories/go'>go (3)</a></li><li><a href='/blog/categories/goos'>goos (1)</a></li><li><a href='/blog/categories/hack'>hack (1)</a></li><li><a href='/blog/categories/hexagonal-rails'>hexagonal rails (1)</a></li><li><a href='/blog/categories/inspeqtor'>inspeqtor (1)</a></li><li><a href='/blog/categories/iomrascálaí'>iomrascálaí (4)</a></li><li><a href='/blog/categories/jim-weirich'>jim weirich (1)</a></li><li><a href='/blog/categories/launchd'>launchd (1)</a></li><li><a href='/blog/categories/learning-rust'>learning rust (5)</a></li><li><a href='/blog/categories/learning-rust-tasks-and-messages'>learning rust tasks and messages (2)</a></li><li><a href='/blog/categories/lisp'>lisp (1)</a></li><li><a href='/blog/categories/management'>management (1)</a></li><li><a href='/blog/categories/matt-wynne'>matt wynne (1)</a></li><li><a href='/blog/categories/monit'>monit (1)</a></li><li><a href='/blog/categories/pair-programming'>pair programming (2)</a></li><li><a href='/blog/categories/polymorphism'>polymorphism (1)</a></li><li><a href='/blog/categories/process-monitoring'>process monitoring (1)</a></li><li><a href='/blog/categories/programming'>programming (6)</a></li><li><a href='/blog/categories/qa'>qa (1)</a></li><li><a href='/blog/categories/quality-assurance'>quality assurance (1)</a></li><li><a href='/blog/categories/rails'>rails (1)</a></li><li><a href='/blog/categories/review'>review (2)</a></li><li><a href='/blog/categories/ruby'>ruby (6)</a></li><li><a href='/blog/categories/ruby-on-rails'>ruby on rails (2)</a></li><li><a href='/blog/categories/rust'>rust (9)</a></li><li><a href='/blog/categories/sass'>sass (1)</a></li><li><a href='/blog/categories/sass-rails'>sass-rails (1)</a></li><li><a href='/blog/categories/scrum'>scrum (1)</a></li><li><a href='/blog/categories/stainless'>stainless (2)</a></li><li><a href='/blog/categories/tasks'>tasks (2)</a></li><li><a href='/blog/categories/tdd'>tdd (2)</a></li><li><a href='/blog/categories/testing'>testing (3)</a></li><li><a href='/blog/categories/travis-ci'>travis ci (1)</a></li><li><a href='/blog/categories/weiqi'>weiqi (3)</a></li><li><a href='/blog/categories/workaround'>workaround (1)</a></li></ul>
 </section>
 
   

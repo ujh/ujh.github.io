@@ -4,7 +4,7 @@
   <title><![CDATA[Category: stainless | Urban Hafner]]></title>
   <link href="http://bettong.net/blog/categories/stainless/atom.xml" rel="self"/>
   <link href="http://bettong.net/"/>
-  <updated>2016-03-09T12:33:15+01:00</updated>
+  <updated>2016-05-20T11:42:05+02:00</updated>
   <id>http://bettong.net/</id>
   <author>
     <name><![CDATA[Urban Hafner]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Stainless 0.1.5 released]]></title>
+    <link href="http://bettong.net/2016/05/20/stainless-0-dot-1-5-released/"/>
+    <updated>2016-05-20T11:30:01+02:00</updated>
+    <id>http://bettong.net/2016/05/20/stainless-0-dot-1-5-released</id>
+    <content type="html"><![CDATA[<p>Today version 0.1.5 of the <a href="https://github.com/reem/stainless">stainless</a> crate was released. It&rsquo;s been in the making for a while now. Mainly because the original author (<a href="https://github.com/reem">Jonathan Reem</a>) has been busy with other things. But he graciously allowed me to help out as I like stainless as lot. So you can expect new releases more often from now on!</p>
+
+<p>The highlights of this release are:</p>
+
+<ol>
+<li>The ability to disable tests by using <code>ignore</code>.</li>
+<li>Working benchmarks! They&rsquo;ve been broken for a while now.</li>
+<li>Matching on the error message for failing tests</li>
+<li>Better documentation. The README was completely rewritten</li>
+</ol>
+
+
+<p>Feel free to open <a href="https://github.com/reem/stainless/issues">new issues on GitHub</a> if you think there&rsquo;s stuff missing from this crate.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rust testing with stainless]]></title>
